@@ -7,10 +7,10 @@ int main(void)
     int* a;
     char* b;
     a = malloc(1000*sizeof(int));
-    *(a+1) = 42;
+    a[1] = 42;
     b = a;
-    printf("%d\n", *(a+1));
-    printf("%d\n", *(b+4));
+    printf("%d\n", a[1]);
+    printf("%d\n", b[4]);
     
 
     
