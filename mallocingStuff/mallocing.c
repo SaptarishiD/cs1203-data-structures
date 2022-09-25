@@ -7,4 +7,10 @@ int main(void)
     int* a;
     a = malloc(1000*sizeof(int));
 
+
+
+
+
+    free(a);
+
 }
