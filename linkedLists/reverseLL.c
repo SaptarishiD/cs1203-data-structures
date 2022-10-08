@@ -25,7 +25,8 @@ int main(int argc, char **argv)
     node *newList = reverseLinkedList(list);
     printLinkedList(newList);
     freeLinkedList(list);
-    freeLinkedList(newList); //when including this line I get the error 
+    
+    //freeLinkedList(newList); //when including this line I get the error 
                              /*reverseLL(78165,0x100150580) malloc: *** error for object 0x600001564000: pointer being freed was not allocated
                             reverseLL(78165,0x100150580) malloc: *** set a breakpoint in malloc_error_break to debug
                             zsh: abort      ./reverseLL
