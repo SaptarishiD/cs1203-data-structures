@@ -88,7 +88,7 @@ node *reverseLinkedList(node *mylist)
         current = following;
     }
 
-    return current; //current will now work because at the end current gets the value following which is NULL so 
+    return prev; //current will now work because at the end current gets the value following which is NULL so 
                     //returning current will return NULL, so we need to return prev instead
 
 }
