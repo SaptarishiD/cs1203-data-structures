@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
 #define COUNT 10
 
 
@@ -29,14 +28,17 @@ void print2D(nodeAddress root);
 int main(void)
 {
 	nodeAddress root = NULL;
-	srand(time(NULL));
 
-	root = insert(root, rand()%20); //need to assign root only for the first time. Now root  points to/has the address of  the first/highest/mainroot node of the bst
+	root = insert(root, 20); //need to assign root only for the first time. Now root  points to/has the address of  the first/highest/mainroot node of the bst
 
-	for (int i = 0; i < 10; i++)
-	{
-		insert(root, rand()%20);
-	}
+	insert(root, 15);
+	insert(root, 25);
+	insert(root, 10);
+	insert(root, 21);
+	insert(root, 16);
+	insert(root, 30);
+	insert(root, 64);
+
 
 	inorder(root);
 	print2D(root);
