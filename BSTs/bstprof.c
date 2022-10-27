@@ -22,17 +22,21 @@ int main(void)
 {
 	nodeAddress root = NULL;
 	root = insert(root, 15);
-	nodeAddress mainroot = root;
-	insert(root, 20);
-	insert(root, 10);
-	insert(root, 25);
-	inorder(root);
+	printf("%i\n", root);
+	//nodeAddress mainroot = root;
+	root = insert(root, 20);
+	printf("%i\n", root);
+	root = insert(root, 10);
+	printf("%i\n", root);
+	root = insert(root, 25);
+	printf("%i\n", root);
+	//inorder(root);
 
 }
 
 nodeAddress createNode(int data)
 {
-	nodeAddress newNode = malloc(sizeof(struct nodeType));
+	nodeAddress newNode = malloc(sizeof(struct nodeType)); //this needs to be sizeof(struct nodeType) not sizeof(nodeAddress) since nodeAddress is just a pointer to a struct nodeType
 	newNode->val = data;
 	newNode->left = NULL;
 	newNode->right = NULL;
@@ -111,7 +115,7 @@ void inorder(nodeAddress root)
 	}
 	if( root )        
 	{
-		printf(" %i ", root->val);
+		printf("%i\n", root->val);
 	}
 	if( root->right ) 
 	{
