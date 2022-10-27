@@ -7,16 +7,16 @@ struct node {
 	struct node * next;	
 };
 
-typedef struct node * NodeAddress;
+typedef struct node * nodeAddress;
 
 
 void swap(int *x, int *y);
 int * generateArray(int n);
-NodeAddress linkedListFromArray(int * a, int n);
-void freeLinkedList(NodeAddress head);
+nodeAddress linkedListFromArray(int * a, int n);
+void freeLinkedList(nodeAddress head);
 void printArray(int * a, int n);
 void printArray1(int *a, int n);
-void printLinkedList(NodeAddress head);
+void printLinkedList(nodeAddress head);
 int findIndexOfMax(int *a, int n);
 void selectionSort(int *a, int n); 
 
@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 	int n = 10;
 	//int maxindex;
 	//int p, q;
-	NodeAddress list;
+	nodeAddress list;
 
 	srand(time(NULL));
 
@@ -73,11 +73,11 @@ int * generateArray(int n)
 	return t;
 }
 
-NodeAddress linkedListFromArray(int * a, int n) 
+nodeAddress linkedListFromArray(int * a, int n) 
 {
 	int i;
-	NodeAddress head = NULL;
-	NodeAddress temp = NULL;
+	nodeAddress head = NULL;
+	nodeAddress temp = NULL;
 
 	// special case for head
 	if(n>0) 
@@ -100,9 +100,9 @@ NodeAddress linkedListFromArray(int * a, int n)
 	return head;
 }
 
-void freeLinkedList(NodeAddress head) 
+void freeLinkedList(nodeAddress head) 
 {
-	NodeAddress prev;
+	nodeAddress prev;
 	while(head) 
     {
 		prev = head;
@@ -130,9 +130,9 @@ void printArray1(int *a, int n)
 	}
 }
 
-void printLinkedList(NodeAddress head) 
+void printLinkedList(nodeAddress head) 
 {
-	NodeAddress c;
+	nodeAddress c;
 	printf("Linked List = ");
 	for(c=head; c!=NULL; c=c->next) 
     {
