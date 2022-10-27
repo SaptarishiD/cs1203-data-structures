@@ -21,21 +21,25 @@ void inorder(nodeAddress root);
 int main(void)
 {
 	nodeAddress root = NULL;
-	insert(root, 15);			//just calling insert(root, data) doesn't work
-	printf("%i\n", root); 
+	root = insert(root, 15);
+	printf("%i\n", root);			
+	//nodeAddress mainroot = root;      
 
-	//nodeAddress mainroot = root;
-
-	insert(root, 20);
+	root = insert(root, 20);
 	printf("%i\n", root);
 
-	insert(root, 10);
+	root = insert(root, 10);
 	printf("%i\n", root);
 
-	insert(root, 25);
+	root = insert(root, 25);
 	printf("%i\n", root);
 
 	inorder(root);
+
+	/**
+	 * even if we are assigning root to insert() every time we call insert() the value of root when printed remains
+	 * unchanged since the insert() function is returning the value of the main root of the bst every time
+	 */
 
 }
 
