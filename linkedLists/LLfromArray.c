@@ -19,8 +19,6 @@ void printLinkedList(NodeAddress head);
  
 
 
-
-
 int main(int argc, char **argv) 
 {
 	int * a;
@@ -55,13 +53,14 @@ int * generateArray(int n)
     {
 		for(int i=0; i<n; i++) 
         {
-            t[i] = rand()%1000;
+            printf("Enter Array Element: ");
+            scanf("%d", &t[i]);
         }
 	}
 	return t;
 }
 
-NodeAddress linkedListFromArray(int * a, int n) 
+NodeAddress linkedListFromArray(int * a, int n)  // this is linear insertion i think
 {
 	int i;
 	NodeAddress head = NULL;
