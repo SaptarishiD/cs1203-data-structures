@@ -39,7 +39,6 @@ int main(void)
 	insert(root, 30);
 	insert(root, 64);
 
-
 	inorder(root);
 	print2D(root);
 	
