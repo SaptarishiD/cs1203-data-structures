@@ -1,5 +1,8 @@
 #include <stdio.h>
-#include<stdlib.h>
+#include <stdlib.h>
+#include <time.h>
+#define COUNT 10
+
 
 struct nodeType {
 	int val;
@@ -16,30 +19,28 @@ nodeAddress search2(nodeAddress root, int data);
 nodeAddress insert(nodeAddress root, int data);
 nodeAddress insert2(nodeAddress root, int data);
 void inorder(nodeAddress root); 
+void print2DUtil(nodeAddress root, int space);
+void print2D(nodeAddress root);
+
+
+
 
 
 int main(void)
 {
 	nodeAddress root = NULL;
-	root = insert(root, 15);
-	printf("%i\n", root);			
-	//nodeAddress mainroot = root;      
+	srand(time(NULL));
 
-	root = insert(root, 20);
-	printf("%i\n", root);
+	root = insert(root, rand()%20); //need to assign root only for the first time. Now root  points to/has the address of  the first/highest/mainroot node of the bst
 
-	root = insert(root, 10);
-	printf("%i\n", root);
-
-	root = insert(root, 25);
-	printf("%i\n", root);
+	for (int i = 0; i < 10; i++)
+	{
+		insert(root, rand()%20);
+	}
 
 	inorder(root);
-
-	/**
-	 * even if we are assigning root to insert() every time we call insert() the value of root when printed remains
-	 * unchanged since the insert() function is returning the value of the main root of the bst every time
-	 */
+	print2D(root);
+	
 
 }
 
@@ -130,4 +131,35 @@ void inorder(nodeAddress root)
 	{
 		inorder(root->right);     
 	}
+}
+
+
+void print2DUtil(nodeAddress root, int space)
+{
+    // Base case
+    if (root == NULL)
+        return;
+ 
+    // Increase distance between levels
+    space += COUNT;
+ 
+    // Process right child first
+    print2DUtil(root->right, space);
+ 
+    // Print current node after space
+    // count
+    printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    printf("%d\n", root->val);
+ 
+    // Process left child
+    print2DUtil(root->left, space);
+}
+ 
+// Wrapper over print2DUtil()
+void print2D(nodeAddress root)
+{
+    // Pass initial space count as 0
+    print2DUtil(root, 0);
 }
