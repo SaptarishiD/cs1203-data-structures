@@ -21,16 +21,21 @@ void inorder(nodeAddress root);
 int main(void)
 {
 	nodeAddress root = NULL;
-	root = insert(root, 15);
-	printf("%i\n", root);
+	insert(root, 15);			//just calling insert(root, data) doesn't work
+	printf("%i\n", root); 
+
 	//nodeAddress mainroot = root;
-	root = insert(root, 20);
+
+	insert(root, 20);
 	printf("%i\n", root);
-	root = insert(root, 10);
+
+	insert(root, 10);
 	printf("%i\n", root);
-	root = insert(root, 25);
+
+	insert(root, 25);
 	printf("%i\n", root);
-	//inorder(root);
+
+	inorder(root);
 
 }
 
