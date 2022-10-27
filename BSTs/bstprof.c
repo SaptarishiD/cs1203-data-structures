@@ -7,49 +7,114 @@ struct nodeType {
 	struct nodeType * right; // larger
 };
 
-typedef struct nodeType * NodeAddress;
+typedef struct nodeType * nodeAddress; //nodeAddress is type nodeType *
+
+nodeAddress createNode(int data);
+void freeNode(nodeAddress mainroot);
+nodeAddress search(nodeAddress root, int data);
+nodeAddress search2(nodeAddress root, int data);
+nodeAddress insert(nodeAddress root, int data);
+nodeAddress insert2(nodeAddress root, int data);
+void inorder(nodeAddress root); 
 
 
-NodeAddress search(NodeAddress root, int val) {
-	if(root==NULL) return NULL;
+int main(void)
+{
+	nodeAddress root = NULL;
+	root = insert(root, 15);
+	nodeAddress mainroot = root;
+	insert(root, 20);
+	insert(root, 10);
+	insert(root, 25);
+	inorder(root);
 
-	if      ( val < root->val ) { return search(root->left , val);}
-	else if ( val > root->val ) { return search(root->right, val);}
-	else                        { return root;}
 }
 
-NodeAddress search2(NodeAddress root, int val) {
-	return root?((val==root->val)? root : (  ( val < root->val )? search2(root->left , val): search2(root->right, val)  ) ): NULL;
+nodeAddress createNode(int data)
+{
+	nodeAddress newNode = malloc(sizeof(struct nodeType));
+	newNode->val = data;
+	newNode->left = NULL;
+	newNode->right = NULL;
+	return newNode;
 }
 
-NodeAddress insert(NodeAddress root, int val) {
-	if(root==NULL) {return createNode(val);}
 
-	if      ( val < root->val ) { root->left  = insert(root->left , val);}
-	else if ( val > root->val ) { root->right = insert(root->right, val);}
+// void freeNode(nodeAddress root)
+// {
+	
+// }
+
+nodeAddress insert(nodeAddress root, int data) 
+{
+	if (root == NULL) 
+	{
+		return createNode(data);
+	}
+
+	else if (data < root->val) 
+	{
+		root->left  = insert(root->left , data);
+	}
+	else if (data > root->val)
+	{ 
+		root->right = insert(root->right, data);
+	}
 
 	return root;
 }
 
-NodeAddress insert2(NodeAddress root, int val) {
-	if(root==NULL) {return createNode(val);}
+nodeAddress insert2(nodeAddress root, int data) 
+{
+	if(root==NULL) 
+	{return createNode(data);}
 
-	if ( val < root->val ) { 
-		if(root->left) return insert2(root->left, val);
-		else root->left = createNode(val);
+	if ( data < root->val ) 
+	{ 
+		if(root->left) return insert2(root->left, data);
+		else root->left = createNode(data);
 		return root->left;
 	}
-	else if ( val > root->val ) { 
-		if(root->right) return insert2(root->right, val);
-		else root->right = createNode(val);
+	else if ( data > root->val ) 
+	{ 
+		if(root->right) return insert2(root->right, data);
+		else root->right = createNode(data);
 		return root->right;
 	}
 	
 	return root;
 }
 
-void inorder(NodeAddress root) {
-	if( root->left )  { inorder(root->left);       }
-	if( root )        { printf(" %s ", root->val); }
-	if( root->right ) { inorder(root->right);      }
+nodeAddress search(nodeAddress root, int data) 
+{
+	if(root==NULL) return NULL;
+
+	if      ( data < root->val ) 
+	{ return search(root->left , data);}
+	else if ( data > root->val ) 
+	{ return search(root->right, data);}
+	else                        
+	{ return root;}
+}
+
+nodeAddress search2(nodeAddress root, int data) 
+{
+	return root?((data==root->val)? root : (  ( data < root->val )? search2(root->left , data): search2(root->right, data)  ) ): NULL;
+}
+
+
+void inorder(nodeAddress root) 
+{
+	if( root->left )  
+	{
+		inorder(root->left);      
+	}
+	if( root )        
+	{
+		printf(" %i ", root->val);
+	}
+	if( root->right ) 
+	{
+		inorder(root->right);     
+	}
 }
