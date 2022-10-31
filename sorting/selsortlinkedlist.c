@@ -22,6 +22,9 @@ int findIndexOfMax(int *a, int n);
 void selectionSort(int *a, int n);
 
 void selsortLL(nodeAddress head);
+void dataswap(nodeAddress min, nodeAddress temp);
+nodeAddress findMinValueLL(nodeAddress forward, nodeAddress min);
+
 
 
 
@@ -31,7 +34,9 @@ void selsortLL(nodeAddress head);
 int main(int argc, char **argv) 
 {
 	int * a;
-	int n = 10;
+	int n;
+    printf("Size of array: ");
+    scanf("%d", &n);
 	//int maxindex;
 	//int p, q;
 	nodeAddress list;
@@ -130,9 +135,17 @@ void printArray(int *a, int n)
     printf("Array = ");
 	for(int i=0; i<n; i++) 
     {
-		printf(" %d ", a[i]);
-	}
-    printf(".\n");
+		if (i == 0)
+        {
+            printf(" %d", a[i]);
+	    }
+        else
+        {
+            printf(", %d ", a[i]);
+        }
+    }
+    printf("\n");
+    printf("\n");
 }
 
 void printLinkedList(nodeAddress head) 
@@ -143,7 +156,8 @@ void printLinkedList(nodeAddress head)
     {
 		printf( c==head?"%d":", %d", c->val);
 	}
-	printf(".\n");
+	printf("\n");
+    printf("\n");
 }
 
 /* ================================================== */
@@ -186,6 +200,73 @@ void selectionSort(int *a, int n)
 
 
 
+// void selsortLL(nodeAddress head)
+// {
+    
+//     nodeAddress temp = head;
+
+//     while(temp)
+//     {
+//         nodeAddress min = temp;
+//         nodeAddress forward = temp->next;
+
+//         min = findMinValueLL(forward, min);
+//         dataswap(min, temp);
+//     }
+    
+    
+
+//         // 5->4->2->3->1
+//         // at end of while loop min points to 1 so the min element is found
+        
+//         //==========================================
+//         //this is data swapping one
+
+// }
+
+void dataswap(nodeAddress min, nodeAddress temp)
+{
+    int tempint = min->val;
+    min->val = temp->val;
+    temp->val = tempint;
+    temp = temp->next;
+}
+
+
+// void findMinValueLL(nodeAddress tempNodeAddr)
+// {
+//     while (tempNodeAddr)
+//     {
+//         nodeAddress min = tempNodeAddr;
+//         nodeAddress forward = tempNodeAddr->next;
+
+//         while(forward)                      // finds the minimum element
+//         {
+//             if (forward->val < min->val)
+//             {
+//                 min = forward;
+//             }
+//             forward = forward->next;
+//         }
+//     }
+// }
+
+
+nodeAddress findMinValueLL(nodeAddress forward, nodeAddress min)
+{
+    while(forward)                      // finds the minimum element
+        {
+            if (forward->val < min->val)
+            {
+                min = forward;
+            }
+            forward = forward->next;
+        }
+    return min;
+}
+
+
+
 void selsortLL(nodeAddress head)
 {
     //do the max version
@@ -200,14 +281,17 @@ void selsortLL(nodeAddress head)
         nodeAddress min = temp;
         nodeAddress forward = temp->next;
 
-        while(forward)
-        {
-            if (forward->val < min->val)
-            {
-                min = forward;
-            }
-            forward = forward->next;
-        }
+        // while(forward)
+        // {
+        //     if (forward->val < min->val)
+        //     {
+        //         min = forward;
+        //     }
+        //     forward = forward->next;
+        // }
+
+        min = findMinValueLL(forward, min);
+
 
 
 
@@ -225,9 +309,4 @@ void selsortLL(nodeAddress head)
 
     }
 }
-
-
-
-
-
 
