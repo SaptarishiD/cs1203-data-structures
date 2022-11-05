@@ -1,3 +1,5 @@
+// Takes randomly generated array of n elements and sorts it in ascending order using selection sort
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -10,13 +12,10 @@ struct node {
 typedef struct node * nodeAddress;
 
 
-void swap(int *x, int *y);
+void swap(int *a, int *b);
 int * generateArray(int n);
-nodeAddress linkedListFromArray(int * a, int n);
-void freeLinkedList(nodeAddress head);
 void printArray(int * a, int n);
 void printArray1(int *a, int n);
-void printLinkedList(nodeAddress head);
 int findIndexOfMax(int *a, int n);
 void selectionSort(int *a, int n); 
 
@@ -27,39 +26,31 @@ int main(int argc, char **argv)
 {
 	int * a;
 	int n = 10;
-	//int maxindex;
-	//int p, q;
 	nodeAddress list;
 
 	srand(time(NULL));
 
 	a = generateArray(n);
-	list = linkedListFromArray(a,n);
-
 	printArray(a,n);
 	selectionSort(a,n);
+    printf("Sorted ");
 	printArray(a,n);
 
-	free(a);
-	freeLinkedList(list);
 
 	return 0;
 }
 
 
 
-
-/* ================================================== */
-void swap(int *x, int *y) 
+void swap(int * a, int * b)
 {
-	int t;
-	t = *x;
-	*x = *y;
-	*y = t;
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;  
 }
 
 
-/* ================================================== */
 int * generateArray(int n) 
 {
 	int * t = malloc( n * sizeof(int) );
@@ -73,45 +64,7 @@ int * generateArray(int n)
 	return t;
 }
 
-nodeAddress linkedListFromArray(int * a, int n) 
-{
-	int i;
-	nodeAddress head = NULL;
-	nodeAddress temp = NULL;
 
-	// special case for head
-	if(n>0) 
-    {
-		head = malloc( sizeof(struct node) );
-		head->val  = a[0];
-		head->next = NULL;
-		temp = head;
-	}
-
-
-	for(i=1; i<n; i++) 
-    {
-		temp->next = malloc( sizeof(struct node) );
-		temp = temp->next;
-		temp->val = a[i];
-		temp->next = NULL;
-	}
-
-	return head;
-}
-
-void freeLinkedList(nodeAddress head) 
-{
-	nodeAddress prev;
-	while(head) 
-    {
-		prev = head;
-		head = head->next;
-		free(prev);
-	}
-}
-
-/* ================================================== */
 void printArray(int * a, int n) 
 {
 	printf("Array = ");
@@ -130,18 +83,7 @@ void printArray1(int *a, int n)
 	}
 }
 
-void printLinkedList(nodeAddress head) 
-{
-	nodeAddress c;
-	printf("Linked List = ");
-	for(c=head; c!=NULL; c=c->next) 
-    {
-		printf( c==head?"%d":", %d", c->val);
-	}
-	printf(".\n");
-}
 
-/* ================================================== */
 
 int findIndexOfMax(int *a, int n) 
 {
