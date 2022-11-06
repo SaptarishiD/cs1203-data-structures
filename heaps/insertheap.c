@@ -3,10 +3,25 @@
 #include <time.h>
 
 
-#define MAX 1000 // Max size of Heap
+void heapify(int array[], int size, int nodeindex);
+void insertNode(int array[], int size, int newelement);
+void printArray(int array[], int size);
+void swap(int * a, int * b);
 
-// Function to heapify ith node in a Heap
-// of size n following a Bottom-up approach
+int main()
+{
+
+    int myarray[500] = {0,11,22,33,44,55}; // 500 is the maximum size of the array/heap
+    int size = 6;
+    printArray(myarray, size);
+    
+	int insertelement = 15;
+
+    insertNode(myarray, size, insertelement);
+    printf("Array after insertion: ");
+	printArray(myarray, size+1);
+}
+
 
 
 
@@ -18,85 +33,34 @@ void swap(int * a, int * b)
     *b = temp;
 }
 
-void heapify(int arr[], int n, int nodeindex)
+void heapify(int arr[], int size, int nodeindex)
 {
-	// Find parent
 	int parent = (nodeindex - 1) / 2;
 
-	if (arr[parent] > 0) 
-    {
-		// For min-Heap
-		// If current node is lesser than its parent
-		// Swap both of them and call heapify again
-		// for the parent
-
+    /**if current element less than its parent then swap them and
+     * call heapify again on the parent index*/
 
 		if (arr[nodeindex] < arr[parent]) 
         {
 			swap(&arr[nodeindex], &arr[parent]);
-
-			// Recursively heapify the parent node
-			heapify(arr, n, parent);
+			heapify(arr, size, parent);
 		}
-	}
+	
 }
 
 // Function to insert a new node to the Heap
-void insertNode(int arr[], int n, int newelement)
+void insertNode(int array[], int size, int newelement)
 {
-	// Increase the size of Heap by 1
-	n = n + 1;
-
-	// Insert the element at end of Heap
-	arr[n - 1] = newelement;
-
-	// Heapify the new node following a
-	// Bottom-up approach
-	heapify(arr, n, n - 1);
+	
+	size = size + 1; //increment n in order to increase the apparent size of the array to accomodate the new element
+	array[size - 1] = newelement;
+	heapify(array, size, size - 1);
 }
 
-// A utility function to print array of size n
-void printArray(int arr[], int n)
+void printArray(int array[], int size)
 {
-	for (int i = 0; i < n; ++i)
-		printf(" %i ", arr[i]);
-
+    printf("Array: ");
+	for (int i = 0; i < size; ++i)
+		printf(" %i ", array[i]);
 	printf("\n");
 }
-
-// Driver Code
-int main()
-{
-	// Array representation of Max-Heap
-	// 10
-	// / \
-	// 5 3
-	// / \
-	// 2 4
-
-	int arr[MAX] = { 10, 5, 3, 2, 4 };
-
-    int arr1[MAX] = {0,11,22,33,44,55};
-
-	// int sizeofmaxarray = 5;
-
-	int insertelement = 15;
-
-    // int sizeofminarray = 6;
-
-	// insertNode(arr, sizeofmaxarray, insertelement);
-
-	// printArray(arr, sizeofmaxarray);
-
-    int sizeofminarray = 6;
-
-    insertNode(arr1, sizeofminarray, insertelement);
-
-	printArray(arr1, sizeofminarray+1);
-
-
-	return 0;
-}
-
-
-//https://www.geeksforgeeks.org/insertion-and-deletion-in-heaps/
