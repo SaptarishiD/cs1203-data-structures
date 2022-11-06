@@ -92,9 +92,11 @@ int main()
 
     insertNode(arr1, sizeofminarray, insertelement);
 
-	printArray(arr1, sizeofminarray);
+	printArray(arr1, sizeofminarray+1);
 
-	// Final Heap will be:
+
+
+	// Final MAX Heap will be:
 	// 15
 	// / \
 	// 5	 10
