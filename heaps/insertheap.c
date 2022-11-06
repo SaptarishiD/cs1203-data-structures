@@ -95,13 +95,6 @@ int main()
 	printArray(arr1, sizeofminarray+1);
 
 
-
-	// Final MAX Heap will be:
-	// 15
-	// / \
-	// 5	 10
-	// / \ /
-	// 2 4 3
 	return 0;
 }
 
