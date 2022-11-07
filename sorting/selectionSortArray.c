@@ -115,9 +115,7 @@ void selectionSort(int *array, int n)
 	for(i = n; i > 1; i = i-1) 
     {
 		imax = findmaxindex(array, i);
-		t = array[imax];
-        array[imax] = array[i-1];
-        array[i-1] = t;
+		swap(&array[imax], &array[i-1]);
 	}
 }
 
