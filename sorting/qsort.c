@@ -18,7 +18,11 @@ int partition(int * array, int start, int stop);
 
 
 nodeaddress linkedlistfromarray(int *array, int size);
-nodeaddress quicksortLL(nodeaddress list);
+void quicksortLL(nodeaddress list);
+nodeaddress findTailNode(nodeaddress head);
+nodeaddress partitionLL(nodeaddress head, nodeaddress tail);
+void quicksort_helper(nodeaddress head, nodeaddress tail);
+
 void printlinkedlist(nodeaddress list);
 void freelinkedlist(nodeaddress list);
 
@@ -40,7 +44,7 @@ int main(void)
     srand(time(NULL));
 
     int * myarr = generateArray(n);
-    //nodeaddress mylist = linkedlistfromarray(myarr, n);
+    nodeaddress mylist = linkedlistfromarray(myarr, n);
 
     printarray(myarr, n);
 
@@ -51,30 +55,36 @@ int main(void)
 
     free(myarr);
 
-    // printlinkedlist(mylist);
+    printlinkedlist(mylist);
 
-    // nodeaddress sortedlist = quicksortLL(mylist);
-    // printf("Sorted ");
+    quicksortLL(mylist);
+    printf("Sorted ");
 
-    // printlinkedlist(sortedlist);
+    printlinkedlist(mylist);
 
-    // freelinkedlist(mylist);
+    freelinkedlist(mylist);
     return 0;
 
 
 }
 
-int * generateArray(int size)
-{
-    int * array = malloc(size * sizeof(int));
-    
-    for (int i = 0; i < size; i++)
-    {
-        array[i] = rand()%1000;
-    }
+//========================================================================================
+//Array Sorting Related
 
-    return array;
+int * generateArray(int size) 
+{
+	int * array = malloc( size * sizeof(int) );
+	if(array) 
+    {
+		for(int i = 0; i < size; i++) 
+        {
+            printf("Enter array element: ");
+            scanf("%d", &array[i]);
+        }
+	}
+	return array;
 }
+
 
 
 
@@ -143,4 +153,116 @@ void swap(int * a, int * b)
     temp = *a;
     *a = *b;
     *b = temp;
+}
+
+
+nodeaddress linkedlistfromarray(int *array, int size)
+{
+    nodeaddress head = NULL;
+    nodeaddress temp = NULL;
+
+    head = malloc(sizeof(struct node)); //head is now pointer to the first node in the list
+    head->val = array[0];
+    head->next = NULL;
+
+    temp = head;
+
+    for (int i = 1; i < size; i++)
+    {
+        temp->next = malloc(sizeof(struct node));  //temp->next is pointer to next node in list
+        temp = temp->next;
+        temp->val = array[i];
+        temp->next = NULL;
+    }
+
+    return head;
+}
+
+
+//========================================================================================
+//Linked List Sorting Related
+
+nodeaddress findTailNode(nodeaddress list)
+{
+    nodeaddress temp = list;
+
+    while(temp->next != NULL)
+    {
+        temp = temp->next;
+    }
+    return temp; //this is now the last node in the list
+}
+
+void quicksortLL(nodeaddress headoflist)
+{
+    if(headoflist == NULL)
+    {
+        return;
+    }
+    nodeaddress tail = findTailNode(headoflist);
+    quicksort_helper(headoflist, tail);
+
+}
+
+void quicksort_helper(nodeaddress headoflist, nodeaddress tail)
+{
+    if (headoflist == NULL || headoflist == tail)
+    {
+        return;
+    }
+    nodeaddress pivot = partitionLL(headoflist, tail);
+    quicksort_helper(headoflist, pivot);
+    quicksort_helper(pivot->next, tail);
+}
+
+
+nodeaddress partitionLL(nodeaddress headoflist, nodeaddress tail)
+{
+    nodeaddress pivot = headoflist;
+    nodeaddress curr = headoflist->next;
+    nodeaddress prev = headoflist;
+
+    while(curr != tail->next)
+    {
+        if (pivot->val > curr->val)
+        {
+            swap(&prev->next->val, &curr->val);
+            prev = prev->next;
+        }
+        curr = curr->next;
+
+    }
+
+    swap(&prev->val, &pivot->val);
+    return prev;
+}
+
+
+
+
+void printlinkedlist(nodeaddress list)
+{
+    nodeaddress temp = NULL;
+    printf("Linked List: ");
+    for (temp = list; temp != NULL; temp = temp->next)
+    {
+        printf(" %i ", temp->val);
+    }
+    printf("\n");
+    printf("\n");
+}
+
+
+
+void freelinkedlist(nodeaddress list)
+{
+    nodeaddress temp = NULL;
+    temp = list;                
+    while(temp != NULL)
+    {
+        temp = temp->next;
+        free(list);
+        list = temp;
+    }
+
 }
