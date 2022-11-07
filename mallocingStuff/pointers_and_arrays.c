@@ -43,7 +43,7 @@ int main(void)
     printf("Second ");
     printarray(secondarr, n*2);
 
-    //free(firstarr);
+    free(firstarr);
     free(secondarr);
 
 
