@@ -1,4 +1,4 @@
-// Takes randomly generated array of n elements and sorts it in ascending order using selection sort
+// Takes array of n elements and sorts it in ascending order using selection sort
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 {
 	int * myarr;                            
 	int n;
-     
+
     printf("Enter size of array: ");
     scanf("%d", &n);
 
