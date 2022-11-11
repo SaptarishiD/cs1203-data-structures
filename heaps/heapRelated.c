@@ -10,9 +10,11 @@ void swap(int * a, int * b);
 int * generateArray1(int size);
 int * generateArray(int size); 
 void print_array(int * array, int size);
-int * build_heap(int * array, int size);
+void build_heap(int * array, int size);
 void sift_down(int * array, int i, int size);
-int extractMin(int * array, int size);
+int extract_min(int * array, int size);
+void insert(int * heaparray, int oldsize, int insertelement);
+
 
 
 
@@ -27,22 +29,29 @@ int main(void)
     int n;
     printf("Enter size of array: ");
     scanf("%d", &n);
-    int * array = generateArray(n);
+    int * array = generateArray1(n);
     printf("Random ");
     print_array(array, n);
     
-    int * heapArray = build_heap(array, n);
+    build_heap(array, n);
     printf("Heap in form of ");
-    print_array(heapArray, n);
+    print_array(array, n);
 
-    int minelement = extractMin(heapArray, n);
-    printf("Minimum element = %i\n", minelement);
+    // int minelement = extract_min(heapArray, n);
+    // printf("Minimum element = %i\n", minelement);
 
-    print_array(heapArray, n);
+    // print_array(heapArray, n);
+    insert(array, n, 3);
+    print_array(array, n+1);
+
+
+
+
 
 
 
     free(array);
+    
 
 
 
@@ -123,7 +132,7 @@ void swap(int * a, int * b)
 }
 
 
-int * build_heap(int * array, int size)
+void build_heap(int * array, int size)
 {
     int startindex = (size - 2)/2; // going to the first problem parent since last row is assumed to be heap
     int i = startindex;
@@ -206,7 +215,7 @@ int * build_heap(int * array, int size)
 
     }
 
-    return array;
+    //return array;
 
     
 
@@ -268,7 +277,7 @@ void sift_down(int * array, int i, int size)
     }
 
 
-    else if (array[2*i + 1] > size - 1 && array[2*i + 2] <= size - 1) //if only right child exists
+    else if (2*i + 1 > size - 1 && 2*i + 2 <= size - 1) //if only right child exists
     {
         if (array[i] <= array[2*i + 2])
         {
@@ -287,11 +296,19 @@ void sift_down(int * array, int i, int size)
 }
 
 
-int extractMin(int * array, int size)
+int extract_min(int * array, int size)
 {
     swap(&array[0], &array[size-1]);
     int i = 0;
 
     sift_down(array, i, size-1);
     return array[size - 1];
+}
+
+void insert(int * heaparray, int oldsize, int insertelement)
+{
+    heaparray = realloc(heaparray, (oldsize+1)*sizeof(int));
+    heaparray[oldsize] = insertelement;
+    build_heap(heaparray, oldsize+1);
+    
 }
