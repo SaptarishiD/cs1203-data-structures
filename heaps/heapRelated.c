@@ -11,7 +11,9 @@ int * generateArray1(int size);
 int * generateArray(int size); 
 void print_array(int * array, int size);
 int * build_heap(int * array, int size);
-void sift_down(int * array, int i);
+void sift_down(int * array, int i, int size);
+int extractMin(int * array, int size);
+
 
 
 
@@ -21,16 +23,21 @@ void sift_down(int * array, int i);
 
 int main(void)
 {
-    srand(1000);
+    srand(time(0));
     int n;
     printf("Enter size of array: ");
     scanf("%d", &n);
-    int * array = generateArray(n);
+    int * array = generateArray1(n);
     printf("Random ");
     print_array(array, n);
     
     int * heapArray = build_heap(array, n);
     printf("Heap in form of ");
+    print_array(heapArray, n);
+
+    int minelement = extractMin(heapArray, n);
+    printf("Minimum element = %i\n", minelement);
+
     print_array(heapArray, n);
 
 
@@ -51,7 +58,7 @@ int * generateArray1(int size)
 	int * array = malloc( size * sizeof(int) );
 	if(array) 
     {
-        for (int i = 0; i <= size; i++)
+        for (int i = 0; i < size; i++)
         {
             array[0] = 15;
             array[1] = 10;
@@ -62,7 +69,7 @@ int * generateArray1(int size)
             array[6] = 4;
             array[7] = 19;
             array[8] = 6;
-            array[9] = 21;
+            array[9] = 0;
         }       
      
 	}
@@ -74,9 +81,9 @@ int * generateArray(int size)
 	int * array = malloc( size * sizeof(int) );
 	if(array) 
     {
-        for (int i = 0; i <= size; i++)
+        for (int i = 0; i < size; i++)
         {
-            array[i] = rand()%25;
+            array[i] = rand()%20;
         }       
      
 	}
@@ -90,7 +97,7 @@ void print_array(int * array, int size)
 {
     printf("Array: ");
   
-    for (int i = 0; i <= size; i++)
+    for (int i = 0; i < size; i++)
     {
         
         if (i == 0)
@@ -123,7 +130,7 @@ int * build_heap(int * array, int size)
 
     while(i >= 0)
     {
-        if (array[2*i + 1] && array[2*i + 2])   // if both left and right child exist
+        if (2*i + 1 <= size-1 && 2*i + 2 <= size-1)   // if both left and right child exist within bounds of array
         {
             if (array[i] <= array[2*i + 1] && array[i] <= array[2*i + 2])
             {
@@ -132,13 +139,13 @@ int * build_heap(int * array, int size)
             else if (array[i] >= array[2*i + 1] && array[i] <= array[2*i + 2])
             {
                 swap(&array[i], &array[2*i + 1]);
-                sift_down(array, 2*i + 1);
+                sift_down(array, 2*i + 1, size);
                 i--;
             }
             else if (array[i] <= array[2*i + 1] && array[i] >= array[2*i + 2])
             {
                 swap(&array[i], &array[2*i + 2]);
-                sift_down(array, 2*i + 2);
+                sift_down(array, 2*i + 2, size);
                 i--;
             }
             else if (array[i] >= array[2*i + 1] && array[i] >= array[2*i + 2])
@@ -146,7 +153,7 @@ int * build_heap(int * array, int size)
                 if ( array[2*i + 1] <=  array[2*i + 2])
                 {
                     swap(&array[i], &array[2*i +1]);
-                    sift_down(array, 2*i + 1);
+                    sift_down(array, 2*i + 1, size);
                     i--;
 
                 }
@@ -154,7 +161,7 @@ int * build_heap(int * array, int size)
                 else if ( array[2*i + 1] >=  array[2*i + 2])
                 {
                     swap(&array[i], &array[2*i +2]);
-                    sift_down(array, 2*i + 2);
+                    sift_down(array, 2*i + 2, size);
                     i--;
 
                 }
@@ -163,7 +170,7 @@ int * build_heap(int * array, int size)
         }
 
 
-        else if (array[2*i + 1] && !array[2*i + 2]) // if only left child exists
+        else if (2*i + 1 <= size - 1 && 2*i + 2 > size - 1) // if only left child exists within bounds of array
         {
             if (array[i] <= array[2*i + 1])
             {
@@ -172,14 +179,14 @@ int * build_heap(int * array, int size)
             else if (array[i] >= array[2*i + 1])
             {
                 swap(&array[i], &array[2*i + 1]);
-                sift_down(array, 2*i + 1);
+                sift_down(array, 2*i + 1, size);
                 i--;
             }
             // else{i--;}           
         }
 
 
-        else if (!array[2*i + 1] && array[2*i + 2]) //if only right child exists
+        else if (2*i + 1 > size - 1 && 2*i + 2 <= size - 1) //if only right child exists within bounds of array
         {
             if (array[i] <= array[2*i + 2])
             {
@@ -188,7 +195,7 @@ int * build_heap(int * array, int size)
             else if (array[i] >= array[2*i + 2])
             {
                 swap(&array[i], &array[2*i + 2]);
-                sift_down(array, 2*i + 2);
+                sift_down(array, 2*i + 2, size);
                 i--;
             } 
             // else{i--;}          
@@ -208,9 +215,9 @@ int * build_heap(int * array, int size)
 
 }
 
-void sift_down(int * array, int i)
+void sift_down(int * array, int i, int size)
 {
-    if (array[2*i + 1] && array[2*i + 2])
+    if (2*i + 1 <= size-1 && 2*i + 2 <= size-1)
     {
         if (array[i] <= array[2*i + 1] && array[i] <= array[2*i + 2])
         {
@@ -219,25 +226,25 @@ void sift_down(int * array, int i)
         else if (array[i] >= array[2*i + 1] && array[i] <= array[2*i + 2])
         {
             swap(&array[i], &array[2*i + 1]);
-            sift_down(array, 2*i + 1);
+            sift_down(array, 2*i + 1, size);
         }
         else if (array[i] <= array[2*i + 1] && array[i] >= array[2*i + 2])
         {
             swap(&array[i], &array[2*i + 2]);
-            sift_down(array, 2*i + 2);
+            sift_down(array, 2*i + 2, size);
         }
         else if (array[i] >= array[2*i + 1] && array[i] >= array[2*i + 2])
         {
             if ( array[2*i + 1] <=  array[2*i + 2])
             {
                 swap(&array[i], &array[2*i +1]);
-                sift_down(array, 2*i + 1);
+                sift_down(array, 2*i + 1, size);
             }
 
             else if ( array[2*i + 1] >=  array[2*i + 2])
             {
                 swap(&array[i], &array[2*i +2]);
-                sift_down(array, 2*i + 2);
+                sift_down(array, 2*i + 2, size);
             }
             // else{return;}
         } 
@@ -245,7 +252,7 @@ void sift_down(int * array, int i)
     }
 
 
-    else if (array[2*i + 1] && !array[2*i + 2]) // if only left child exists
+    else if (2*i + 1 <= size - 1 && 2*i + 2 > size - 1) // if only left child exists
     {
         if (array[i] <= array[2*i + 1])
         {
@@ -254,14 +261,14 @@ void sift_down(int * array, int i)
         else if (array[i] >= array[2*i + 1])
         {
             swap(&array[i], &array[2*i + 1]);
-            sift_down(array, 2*i + 1);
+            sift_down(array, 2*i + 1, size);
             
         }
         // else{return;}           
     }
 
 
-    else if (!array[2*i + 1] && array[2*i + 2]) //if only right child exists
+    else if (array[2*i + 1] > size - 1 && array[2*i + 2] <= size - 1) //if only right child exists
     {
         if (array[i] <= array[2*i + 2])
         {
@@ -270,11 +277,21 @@ void sift_down(int * array, int i)
         else if (array[i] >= array[2*i + 2])
         {
             swap(&array[i], &array[2*i + 2]);
-            sift_down(array, 2*i + 2);
+            sift_down(array, 2*i + 2, size);
             
         }
         // else{return;}           
     }
     // else{return;}
 
+}
+
+
+int extractMin(int * array, int size)
+{
+    swap(&array[0], &array[size-1]);
+    int i = 0;
+
+    sift_down(array, i, size-1);
+    return array[size - 1];
 }
