@@ -297,7 +297,7 @@ void sift_down(int * array, int i, int size)
 
 int extract_min(int * array, int size)
 {
-    swap(&array[0], &array[size-1]);                        // swap with last element
+    swap(&array[0], &array[size-1]);                        // swap with the last element
     int i = 0;                                              
 
     sift_down(array, i, size-1);                            // sifting down to maintain heap property
