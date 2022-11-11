@@ -19,29 +19,31 @@ void insert(int * heaparray, int oldsize, int insertelement);
 
 
 
-//should i just do with normal arrays
-
-
-
 int main(void)
 {
     srand(time(NULL));
     int n;
     printf("Enter size of array: ");
     scanf("%d", &n);
-    int * array = generateArray1(n);
+    int * array = generateArray(n);
     printf("Random ");
     print_array(array, n);
     
     build_heap(array, n);
     printf("Heap in form of ");
     print_array(array, n);
+    
 
-    // int minelement = extract_min(heapArray, n);
+    // int minelement = extract_min(array, n);      
     // printf("Minimum element = %i\n", minelement);
+    // printf("Minimum element at end of ");
+    // print_array(array, n);
 
-    // print_array(heapArray, n);
-    insert(array, n, 3);
+
+    int insert_this_element;
+    printf("Enter element to be inserted: ");
+    scanf("%d", &insert_this_element);
+    insert(array, n, insert_this_element);
     print_array(array, n+1);
 
 
