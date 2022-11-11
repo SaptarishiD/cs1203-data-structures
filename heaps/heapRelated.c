@@ -4,7 +4,6 @@
 #include <assert.h>
 
 
-#define arraysize 500
 
 void swap(int * a, int * b);
 int * generateArray1(int size);
@@ -32,7 +31,7 @@ int main(void)
     build_heap(array, n);
     printf("Heap in form of ");
     print_array(array, n);
-    
+
 
     // int minelement = extract_min(array, n);      
     // printf("Minimum element = %i\n", minelement);
