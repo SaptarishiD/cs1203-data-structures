@@ -15,6 +15,7 @@ int extract_min(int * array, int size);
 void insert(int * heaparray, int oldsize, int insertelement);
 void heap_sort(int * heaparray, int size);
 
+void heapSort(int * randarray, int size);
 
 
 
@@ -30,9 +31,9 @@ int main(void)
     printf("Random ");
     print_array(array, n);
     
-    build_heap(array, n);
-    printf("Heap in form of ");
-    print_array(array, n);
+    // build_heap(array, n);
+    // printf("Heap in form of ");
+    // print_array(array, n);
 
 
     // int minelement = extract_min(array, n);      
@@ -47,8 +48,11 @@ int main(void)
     // insert(array, n, insert_this_element);
     // print_array(array, n+1);
 
-    heap_sort(array, n);                //takes as argument an array which is already in the form of a heap
-    printf("Descending Sorted ");
+    // heap_sort(array, n);                //takes as argument an array which is already in the form of a heap
+    // printf("Descending Sorted ");
+    // print_array(array, n);
+
+    heapSort(array, n);
     print_array(array, n);
 
 
@@ -328,6 +332,19 @@ void heap_sort(int * heaparray, int size)
     while(i > 0)
     {
         extract_min(heaparray, i);
+        i--;
+    }
+
+}
+
+
+void heapSort(int * randarray, int size)
+{
+    build_heap(randarray, size);
+    int i = size;
+    while(i > 0)
+    {
+        extract_min(randarray, i);
         i--;
     }
 
