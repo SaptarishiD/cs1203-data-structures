@@ -13,6 +13,8 @@ void build_heap(int * array, int size);
 void sift_down(int * array, int i, int size);
 int extract_min(int * array, int size);
 void insert(int * heaparray, int oldsize, int insertelement);
+void heap_sort(int * heaparray, int size);
+
 
 
 
@@ -39,11 +41,16 @@ int main(void)
     // print_array(array, n);
 
 
-    int insert_this_element;
-    printf("Enter element to be inserted: ");
-    scanf("%d", &insert_this_element);
-    insert(array, n, insert_this_element);
-    print_array(array, n+1);
+    // int insert_this_element;
+    // printf("Enter element to be inserted: ");
+    // scanf("%d", &insert_this_element);
+    // insert(array, n, insert_this_element);
+    // print_array(array, n+1);
+
+    heap_sort(array, n);                //takes as argument an array which is already in the form of a heap
+    printf("Descending Sorted ");
+    print_array(array, n);
+
 
 
 
@@ -93,7 +100,7 @@ int * generateArray(int size)
     {
         for (int i = 0; i < size; i++)
         {
-            array[i] = rand()%20;
+            array[i] = rand()%25;
         }       
      
 	}
@@ -312,4 +319,16 @@ void insert(int * heaparray, int oldsize, int insertelement)
     heaparray[oldsize] = insertelement;
     build_heap(heaparray, oldsize+1);
     
+}
+
+
+void heap_sort(int * heaparray, int size)
+{
+    int i = size;
+    while(i > 0)
+    {
+        extract_min(heaparray, i);
+        i--;
+    }
+
 }
