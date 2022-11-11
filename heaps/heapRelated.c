@@ -23,11 +23,11 @@ int extractMin(int * array, int size);
 
 int main(void)
 {
-    srand(time(0));
+    srand(time(NULL));
     int n;
     printf("Enter size of array: ");
     scanf("%d", &n);
-    int * array = generateArray1(n);
+    int * array = generateArray(n);
     printf("Random ");
     print_array(array, n);
     
