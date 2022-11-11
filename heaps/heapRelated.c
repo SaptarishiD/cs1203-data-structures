@@ -48,29 +48,16 @@ int main(void)
     // insert(array, n, insert_this_element);
     // print_array(array, n+1);
 
-    // heap_sort(array, n);                //takes as argument an array which is already in the form of a heap
+    // heap_sort(array, n);                // takes as argument an array which is already in the form of a heap
     // printf("Descending Sorted ");
     // print_array(array, n);
 
-    heapSort(array, n);
+
+    heapSort(array, n);                    // sorts any random array
+    printf("Sorted ");
     print_array(array, n);
 
-
-
-
-
-
-
-
     free(array);
-    
-
-
-
-
-
-
-
 }
 
 
@@ -310,18 +297,18 @@ void sift_down(int * array, int i, int size)
 
 int extract_min(int * array, int size)
 {
-    swap(&array[0], &array[size-1]);
-    int i = 0;
+    swap(&array[0], &array[size-1]);                        // swap with last element
+    int i = 0;                                              
 
-    sift_down(array, i, size-1);
+    sift_down(array, i, size-1);                            // sifting down to maintain heap property
     return array[size - 1];
 }
 
 void insert(int * heaparray, int oldsize, int insertelement)
 {
-    heaparray = realloc(heaparray, (oldsize+1)*sizeof(int));
-    heaparray[oldsize] = insertelement;
-    build_heap(heaparray, oldsize+1);
+    heaparray = realloc(heaparray, (oldsize+1)*sizeof(int)); // making space for one more element
+    heaparray[oldsize] = insertelement;                      // inserting element into last position
+    build_heap(heaparray, oldsize+1);                        // heapifying
     
 }
 
@@ -344,7 +331,7 @@ void heapSort(int * randarray, int size)
     int i = size;
     while(i > 0)
     {
-        extract_min(randarray, i);
+        extract_min(randarray, i); // if we keep on extracting the minimum element with decreasing array size we get a descending sorted array
         i--;
     }
 
