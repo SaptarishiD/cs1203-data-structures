@@ -7,33 +7,38 @@ struct node {
 	struct node * next;	
 };
 
-typedef struct node * NodeAddress;
+typedef struct node * nodeaddress;
 
 
 int * generateArray(int n);
-NodeAddress linkedListFromArray(int * a, int n);
-void freeLinkedList(NodeAddress head);
+int * makearray(int size);
+nodeaddress linkedListFromArray(int * a, int n);
+void freeLinkedList(nodeaddress head);
 void printArray(int * a, int n);
 void printArray1(int *a, int n);
-void printLinkedList(NodeAddress head);
+void printLinkedList(nodeaddress head);
+
+void print_halfLL(nodeaddress head);
  
 
 
 int main(int argc, char **argv) 
 {
 	int * a;
-	int n = 10;
+	int n = 11;
 	//int maxindex;
 	//int p, q;
-	NodeAddress list;
+	nodeaddress list;
 
 	srand(time(NULL));
 
-	a = generateArray(n);
+	a = makearray(n);
 	list = linkedListFromArray(a,n);
 
 	printArray(a,n);
     printLinkedList(list);
+
+	print_halfLL(list);
 
 	free(a);
 	freeLinkedList(list);
@@ -60,11 +65,35 @@ int * generateArray(int n)
 	return t;
 }
 
-NodeAddress linkedListFromArray(int * a, int n)  // this is linear insertion i think
+int * makearray(int size) 
+{
+	int * array = malloc( size * sizeof(int) );
+	if(array) 
+    {
+        for (int i = 0; i < size; i++)
+        {
+            array[0] = 15;
+            array[1] = 10;
+            array[2] = 2;
+            array[3] = 19;
+            array[4] = 5;
+            array[5] = 20;
+            array[6] = 4;
+            array[7] = 19;
+            array[8] = 6;
+            array[9] = 0;
+			array[10] = 17;
+        }       
+     
+	}
+	return array;
+}
+
+nodeaddress linkedListFromArray(int * a, int n)  // this is linear insertion i think
 {
 	int i;
-	NodeAddress head = NULL;
-	NodeAddress temp = NULL;
+	nodeaddress head = NULL;
+	nodeaddress temp = NULL;
 
 	// special case for head
 	if(n>0) 
@@ -87,9 +116,9 @@ NodeAddress linkedListFromArray(int * a, int n)  // this is linear insertion i t
 	return head;
 }
 
-void freeLinkedList(NodeAddress head) 
+void freeLinkedList(nodeaddress head) 
 {
-	NodeAddress prev;
+	nodeaddress prev;
 	while(head) 
     {
 		prev = head;
@@ -117,13 +146,42 @@ void printArray1(int *a, int n)
 	}
 }
 
-void printLinkedList(NodeAddress head) 
+void printLinkedList(nodeaddress head) 
 {
-	NodeAddress c;
+	nodeaddress c;
 	printf("Linked List = ");
 	for(c=head; c!=NULL; c=c->next) 
     {
 		printf( c==head?"%d":", %d", c->val);
 	}
 	printf(".\n");
+}
+
+// for (node *tmp = list; tmp != NULL; tmp = tmp->next)
+//     {
+//         printf("%i\n", tmp->number);
+//     }
+
+
+void print_halfLL(nodeaddress head)
+{
+	// we don't know how many elements are there in the linked list 
+	nodeaddress temp = head;
+	nodeaddress slow = head;
+	nodeaddress fast = head;
+
+	printf("Half Linked List = ");
+
+	if(head)
+	{
+		while(fast && fast->next)
+		{
+			printf(" %i ", slow->val);
+			fast = fast->next->next;
+			slow = slow->next;
+		}
+	}
+
+	
+
 }
