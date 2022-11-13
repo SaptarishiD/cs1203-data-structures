@@ -16,9 +16,9 @@ nodeaddress createBST(int * array, int size);
 nodeaddress createNode(int data);
 nodeaddress insert(nodeaddress root, int data);
 nodeaddress delete(nodeaddress root, int nodedata);
-int findMinRightSubtree(nodeaddress root);
+nodeaddress find_node_with_min_val(nodeaddress root);
 void freenode(nodeaddress root);
-
+void inorder(nodeaddress root); 
 
 
 
@@ -37,19 +37,41 @@ int main(void)
     int * array = makearray(n);
 
     nodeaddress bstroot = createBST(array, n);
-    print2D(bstroot);
-    nodeaddress newroot = delete(bstroot, 18);
-    print2D(newroot);
+    //print2D(bstroot);
+    inorder(bstroot);
+    bstroot = delete(bstroot, 17);
+    
+    printf("\n");
+    inorder(bstroot);
+    //print2D(bstroot);
 
 
     free(array);
+    
     freenode(bstroot);
+
 
 
 
 
 }
 
+
+void inorder(nodeaddress root) 
+{
+	if( root->left )  
+	{
+		inorder(root->left);      
+	}
+	if( root )        
+	{
+		printf("%i\n", root->val);
+	}
+	if( root->right ) 
+	{
+		inorder(root->right);     
+	}
+}
 
 
 int * makearray(int size) 
@@ -141,33 +163,51 @@ nodeaddress search(nodeaddress root, int data)
 
 nodeaddress delete(nodeaddress root, int nodedata)
 {
-    nodeaddress node = search(root, 17);
 
-    if (node->left == NULL && node->right == NULL)
+    if (root == NULL)
     {
-        free(node);
         return NULL;
     }
-
-    else if(node->left == NULL && node->right != NULL)
-    {
-        nodeaddress temp = node->right;
-        free(node);
-        return temp;
+    if (nodedata < root->val) 
+	{ 
+        root->left = delete(root->left , nodedata);
+    }
+	else if (nodedata > root->val) 
+	{ 
+        root->right = delete(root->right, nodedata);
     }
 
-    else if(node->left != NULL && node->right == NULL)
+    else 
     {
-        nodeaddress temp = node->left;
-        free(node);
-        return temp;
-    }
+        nodeaddress tempnode = NULL;
 
-    else if (node->left != NULL && node->right != NULL)
-    {
-        int min = findMinRightSubtree(node->right);
-        node->val = min;
-        node->right = delete(node->right, min);     // need to actually free the node associate with min
+        if (root->left == NULL && root->right == NULL)
+        {
+            free(root);
+            return tempnode;
+        }
+
+        else if(root->left == NULL && root->right != NULL)
+        {
+            tempnode = root->right;
+            free(root);
+            return tempnode;
+        }
+
+        else if(root->left != NULL && root->right == NULL)
+        {
+            tempnode = root->left;
+            free(root);
+            return tempnode;
+        }
+
+        else if (root->left != NULL && root->right != NULL)
+        {
+            nodeaddress min_node = find_node_with_min_val(root->right);       // the minimum valued node in the right subtree
+            root->val = min_node->val;
+            free(min_node);     // need to actually free the node associate with min
+        }
+
     }
 
 
@@ -177,7 +217,7 @@ nodeaddress delete(nodeaddress root, int nodedata)
 }
 
 
-int findMinRightSubtree(nodeaddress root)
+nodeaddress find_node_with_min_val(nodeaddress root)
 {
     nodeaddress temp = root;
 
@@ -186,7 +226,7 @@ int findMinRightSubtree(nodeaddress root)
         temp = temp->left;
     }
 
-    return temp->val;
+    return temp;
 
 }
 
@@ -202,12 +242,14 @@ void freenode(nodeaddress root)
     {
         freenode(root->right);
         free(root);
+        root = NULL;
     }
 
     else if(root->left != NULL && root->right == NULL)
     {
         freenode(root->left);
         free(root);
+        root = NULL;
       
     }
 
@@ -216,9 +258,13 @@ void freenode(nodeaddress root)
       freenode(root->right);
       freenode(root->left);
       free(root);
+      root = NULL;
     }
 
 }
+
+
+
 
 
 
