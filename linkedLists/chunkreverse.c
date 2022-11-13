@@ -7,15 +7,19 @@ struct node {
 	struct node * next;	
 };
 
-typedef struct node * nodeAddress;
+typedef struct node * nodeaddress;
 
 
 int * generateArray(int n);
-nodeAddress linkedListFromArray(int * a, int n);
-void freeLinkedList(nodeAddress head);
+nodeaddress linkedListFromArray(int * a, int n);
+void freeLinkedList(nodeaddress head);
 void printArray1(int *a, int n);
-void printLinkedList(nodeAddress head);
-nodeAddress chunkreverse(nodeAddress head, int chunksize);
+void printLinkedList(nodeaddress head);
+
+void reverseLinkedList(nodeaddress mylist);
+nodeaddress chunkreverse(nodeaddress head, int k);
+int * makearray(int size);
+
 
  
 
@@ -23,20 +27,21 @@ nodeAddress chunkreverse(nodeAddress head, int chunksize);
 int main(int argc, char **argv) 
 {
 	int * a;
-	int n = 10;
-	//int maxindex;
-	//int p, q;
-	nodeAddress list;
+	int n = 11;
+	nodeaddress list;
 
 	srand(time(NULL));
 
-	a = generateArray(n);
+	// a = generateArray(n);
+    a = makearray(n);
 	list = linkedListFromArray(a,n);
 
 	printArray1(a,n);
     printLinkedList(list);
-    //nodeAddress chunkreversedlist = chunkreverse(list, 3);
-    //printLinkedList(chunkreversedlist);
+
+    nodeaddress chunkreversedlist = chunkreverse(list, 3);
+    printf("Chunk reversed ");
+    printLinkedList(chunkreversedlist);
 	free(a);
 	freeLinkedList(list);
 
@@ -62,11 +67,36 @@ int * generateArray(int n)
 	return t;
 }
 
-nodeAddress linkedListFromArray(int * a, int n)  // this is linear insertion i think
+
+int * makearray(int size) 
+{
+	int * array = malloc( size * sizeof(int) );
+	if(array) 
+    {
+        for (int i = 0; i < size; i++)
+        {
+            array[0] = 15;
+            array[1] = 10;
+            array[2] = 2;
+            array[3] = 19;
+            array[4] = 5;
+            array[5] = 20;
+            array[6] = 4;
+            array[7] = 19;
+            array[8] = 6;
+            array[9] = 0;
+			array[10] = 17;
+        }       
+     
+	}
+	return array;
+}
+
+nodeaddress linkedListFromArray(int * a, int n)  // this is linear insertion i think
 {
 	int i;
-	nodeAddress head = NULL;
-	nodeAddress temp = NULL;
+	nodeaddress head = NULL;
+	nodeaddress temp = NULL;
 
 	// special case for head
 	if(n>0) 
@@ -89,9 +119,9 @@ nodeAddress linkedListFromArray(int * a, int n)  // this is linear insertion i t
 	return head;
 }
 
-void freeLinkedList(nodeAddress head) 
+void freeLinkedList(nodeaddress head) 
 {
-	nodeAddress prev;
+	nodeaddress prev;
 	while(head) 
     {
 		prev = head;
@@ -112,9 +142,9 @@ void printArray1(int *a, int n)
 }
 
 
-void printLinkedList(nodeAddress head) 
+void printLinkedList(nodeaddress head) 
 {
-	nodeAddress c;
+	nodeaddress c;
 	printf("Linked List = ");
 	for(c=head; c!=NULL; c=c->next) 
     {
@@ -123,9 +153,57 @@ void printLinkedList(nodeAddress head)
 	printf(".\n");
 }
 
-
-nodeAddress chunkreverse(nodeAddress head, int chunksize)
+void reverseLinkedList(nodeaddress mylist)
 {
-    return head;
+    nodeaddress prev = NULL;
+    nodeaddress following = NULL;
+    nodeaddress current = mylist;
+
+    while (current != NULL)
+    {
+        following = current->next; 
+        current->next = prev;
+        prev = current;
+        current = following;
+    }
+
+    //return prev;    //current will now work because at the end current gets the value following which is NULL so 
+                    //returning current will return NULL, so we need to return prev instead
+
 }
+
+
+nodeaddress chunkreverse(nodeaddress head, int k)
+{
+    int count = 0;
+    nodeaddress headoflist = head;
+
+    nodeaddress prev = NULL;
+    nodeaddress following = NULL;
+    nodeaddress current = head;
+
+    while (current != NULL && count < k)
+    {
+        following = current->next; 
+        current->next = prev;
+        prev = current;
+        current = following;
+
+        count++;
+    }
+
+    if (following)
+    {
+        head->next = chunkreverse(following, k);
+    }
+
+    return prev;
+}
+
+
+// nodeaddress chunkreverse(nodeaddress head, int k)
+// {
+
+
+// }
 
