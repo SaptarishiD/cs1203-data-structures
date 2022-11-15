@@ -12,24 +12,24 @@ struct nodeType {
 
 typedef struct nodeType * nodeaddress; 
 
+int max(int a, int b);
+int find_height(nodeaddress node);
+nodeaddress createNode(int data);
+int balancing_factor(nodeaddress node);
+nodeaddress left_rotate(nodeaddress x);
+nodeaddress right_rotate(nodeaddress y);
+nodeaddress insert(nodeaddress node, int data);
+nodeaddress balance_tree(nodeaddress node, int data);
+void print2DUtil(nodeaddress root, int space);
+void print2D(nodeaddress root);
+
 
 
 int max(int a, int b)
 {
-    if (a>b)
-    {
-        return a;
-    }
-
-    else if (b>a)
-    {
-        return b;
-    }
-
-    else 
-    {
-        return a;
-    }
+    if (a>b) {return a;}
+    else if (b>a) {return b;}
+    else {return a;}
 }
 
 int find_height(nodeaddress node)
@@ -39,7 +39,7 @@ int find_height(nodeaddress node)
         return 0;
     }
 
-    return node->height;
+    else {return node->height;}
 }
 
 nodeaddress createNode(int data)
@@ -99,12 +99,131 @@ nodeaddress right_rotate(nodeaddress y)
 
 nodeaddress insert(nodeaddress node, int data)
 {
+    if (!node)
+    {
+        createNode(data);
+    }
+
+    else if (data < node->val)
+    {
+        node->left = insert(node->left, data);
+    }
+    else if (data > node->val)
+    {
+        node->right = insert(node->right, data);
+    }
+
+    node->height = max(find_height(node->left), find_height(node->right)) + 1;
+
+    node = balance_tree(node, data);
+
+
+    return node;
 
     
 }
 
 
+nodeaddress balance_tree(nodeaddress node, int data)
+{
+    int factor = balancing_factor(node);
 
+    if (factor > 1 && data < node->left->val ) // both x and y heavy in left direction
+    {
+        node = left_rotate(node);
+    }
+    else if (factor < -1 && data > node->right->val ) // both x and y heavy in right direction
+    {
+        node = right_rotate(node);
+    }
+    else if (factor > 1 && data > node->right->val ) // x is left heavy and y is right heavy
+    {
+        node->left = right_rotate(node->left);
+        node = left_rotate(node);
+    }
+    else if (factor < -1 && data < node->left->val ) // x is right heavy and y is left heavy
+    {
+        node->right = right_rotate(node->right);
+        node = right_rotate(node);
+    }
+
+    return node;
+}
+
+
+void print2DUtil(nodeaddress root, int space)
+{
+    // Base case
+    if (root == NULL)
+        return;
+ 
+    // Increase distance between levels
+    space += COUNT;
+ 
+    // Process right child first
+    print2DUtil(root->right, space);
+ 
+    // Print current node after space
+    // count
+    printf("\n");
+    for (int i = COUNT; i < space; i++)
+        printf(" ");
+    printf("%d\n", root->val);
+ 
+    // Process left child
+    print2DUtil(root->left, space);
+}
+ 
+// Wrapper over print2DUtil()
+void print2D(nodeaddress root)
+{
+    // Pass initial space count as 0
+    print2DUtil(root, 0);
+}
+
+
+void inorder(nodeaddress root) 
+{
+    if(!root)
+    {
+        return;
+    }
+	if( root->left )  
+	{
+		inorder(root->left);      
+	}
+	if( root )        
+	{
+		printf("%i\n", root->val);
+	}
+	if( root->right ) 
+	{
+		inorder(root->right);     
+	}
+}
+
+
+
+int main(void)
+{
+    nodeaddress root = NULL;
+ 
+ 
+    root = insert(root, 1);
+    // root = insert(root, 2);
+    // root = insert(root, 4);
+    // root = insert(root, 5);
+    // root = insert(root, 6);
+    // root = insert(root, 3);
+
+    //print2D(root);
+
+    inorder(root);
+
+    free(root);
+    
+    return 0;
+}
 
 
 
