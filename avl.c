@@ -237,7 +237,7 @@ int main(void)
     root = insert(root, 10);
     root = insert(root, 11);
 
-    print2D(root);
+    print2D(root); // prints tree horizontally
 
     inorder(root);
 
