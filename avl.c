@@ -39,6 +39,11 @@ int find_height(nodeaddress node)
         return 0;
     }
 
+    if (node->left == NULL && node->right == NULL)
+    {
+        return 1;
+    }
+
     else {return node->height;}
 }
 
@@ -48,7 +53,7 @@ nodeaddress createNode(int data)
     node->val = data;
     node->left = NULL;
     node->right = NULL;
-    node->height = 0; // since when inserting node it becomes a leaf node
+    node->height = 1; // since when inserting node it becomes a leaf node
     return node;
 }
 
@@ -99,9 +104,9 @@ nodeaddress right_rotate(nodeaddress y)
 
 nodeaddress insert(nodeaddress node, int data)
 {
-    if (!node)
+    if (node == NULL)
     {
-        createNode(data);
+        return createNode(data);
     }
 
     else if (data < node->val)
@@ -113,12 +118,18 @@ nodeaddress insert(nodeaddress node, int data)
         node->right = insert(node->right, data);
     }
 
+    else
+    {
+        return node;
+    }
+
     node->height = max(find_height(node->left), find_height(node->right)) + 1;
 
     node = balance_tree(node, data);
-
+    
 
     return node;
+    
 
     
 }
@@ -130,25 +141,27 @@ nodeaddress balance_tree(nodeaddress node, int data)
 
     if (factor > 1 && data < node->left->val ) // both x and y heavy in left direction
     {
-        node = left_rotate(node);
+        return right_rotate(node);
     }
     else if (factor < -1 && data > node->right->val ) // both x and y heavy in right direction
     {
-        node = right_rotate(node);
+        return left_rotate(node);
     }
-    else if (factor > 1 && data > node->right->val ) // x is left heavy and y is right heavy
+    else if (factor > 1 && data > node->left->val ) // x is left heavy and y is right heavy
     {
-        node->left = right_rotate(node->left);
-        node = left_rotate(node);
+        node->left = left_rotate(node->left);
+        return right_rotate(node);
     }
-    else if (factor < -1 && data < node->left->val ) // x is right heavy and y is left heavy
+    else if (factor < -1 && data < node->right->val ) // x is right heavy and y is left heavy
     {
         node->right = right_rotate(node->right);
-        node = right_rotate(node);
+        return left_rotate(node);
     }
-
-    return node;
+    
+    else {return node;}
 }
+
+
 
 
 void print2DUtil(nodeaddress root, int space)
@@ -180,6 +193,9 @@ void print2D(nodeaddress root)
     // Pass initial space count as 0
     print2DUtil(root, 0);
 }
+//utility functions to print tree in tree form https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
+
+
 
 
 void inorder(nodeaddress root) 
@@ -209,18 +225,23 @@ int main(void)
     nodeaddress root = NULL;
  
  
-    root = insert(root, 1);
-    // root = insert(root, 2);
-    // root = insert(root, 4);
-    // root = insert(root, 5);
-    // root = insert(root, 6);
-    // root = insert(root, 3);
+    root = insert(root, 3);
+    root = insert(root, 2);
+    root = insert(root, 5);
+    root = insert(root, 7);
+    root = insert(root, 8);
 
-    //print2D(root);
+    root = insert(root, 4);
+    root = insert(root, 1);
+    root = insert(root, 9);
+    root = insert(root, 10);
+    root = insert(root, 11);
+
+    print2D(root);
 
     inorder(root);
 
-    free(root);
+    //free(root);
     
     return 0;
 }
