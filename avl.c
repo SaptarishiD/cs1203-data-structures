@@ -19,7 +19,9 @@ int balancing_factor(nodeaddress node);
 nodeaddress left_rotate(nodeaddress x);
 nodeaddress right_rotate(nodeaddress y);
 nodeaddress insert(nodeaddress node, int data);
-nodeaddress balance_tree(nodeaddress node, int data);
+nodeaddress balance_tree(nodeaddress node);
+nodeaddress delete(nodeaddress root, int nodedata);
+nodeaddress find_node_with_min_val(nodeaddress root);
 void print2DUtil(nodeaddress root, int space);
 void print2D(nodeaddress root);
 
@@ -125,7 +127,7 @@ nodeaddress insert(nodeaddress node, int data)
 
     node->height = max(find_height(node->left), find_height(node->right)) + 1;
 
-    node = balance_tree(node, data);
+    node = balance_tree(node);
     
 
     return node;
@@ -135,24 +137,24 @@ nodeaddress insert(nodeaddress node, int data)
 }
 
 
-nodeaddress balance_tree(nodeaddress node, int data)
+nodeaddress balance_tree(nodeaddress node)
 {
     int factor = balancing_factor(node);
 
-    if (factor > 1 && data < node->left->val ) // both x and y heavy in left direction
+    if (factor > 1 && balancing_factor(node->left) >= 1 ) // both x and y heavy in left direction
     {
         return right_rotate(node);
     }
-    else if (factor < -1 && data > node->right->val ) // both x and y heavy in right direction
+    else if (factor < -1 && balancing_factor(node->right) <= -1 ) // both x and y heavy in right direction
     {
         return left_rotate(node);
     }
-    else if (factor > 1 && data > node->left->val ) // x is left heavy and y is right heavy
+    else if (factor > 1 && balancing_factor(node->left) <= -1 ) // x is left heavy and y is right heavy
     {
         node->left = left_rotate(node->left);
         return right_rotate(node);
     }
-    else if (factor < -1 && data < node->right->val ) // x is right heavy and y is left heavy
+    else if (factor < -1 && balancing_factor(node->right) >= 1 ) // x is right heavy and y is left heavy
     {
         node->right = right_rotate(node->right);
         return left_rotate(node);
@@ -161,7 +163,81 @@ nodeaddress balance_tree(nodeaddress node, int data)
     else {return node;}
 }
 
+nodeaddress find_node_with_min_val(nodeaddress root)
+{
+    nodeaddress temp = root;
 
+    while(temp->left !=NULL)
+    {
+        temp = temp->left;
+    }
+
+    return temp;
+
+}
+
+nodeaddress delete(nodeaddress root, int nodedata)
+{
+
+    if (root == NULL)
+    {
+        return NULL;
+    }
+    if (nodedata < root->val) 
+	{ 
+        root->left = delete(root->left , nodedata);
+    }
+	else if (nodedata > root->val) 
+	{ 
+        root->right = delete(root->right, nodedata);
+    }
+
+    else 
+    {
+        nodeaddress tempnode = NULL;
+
+        if (root->left == NULL && root->right == NULL)
+        {
+            free(root);
+            return tempnode;
+        }
+
+        else if(root->left == NULL && root->right != NULL)
+        {
+            tempnode = root->right;
+            free(root);
+            return tempnode;
+        }
+
+        else if(root->left != NULL && root->right == NULL)
+        {
+            tempnode = root->left;
+            free(root);
+            return tempnode;
+        }
+
+        else if (root->left != NULL && root->right != NULL)
+        {
+            nodeaddress min_node = find_node_with_min_val(root->right);       // the minimum valued node in the right subtree (aka the successor element to nodedata)
+            int succ = min_node->val;
+            delete(root, min_node->val);                  // need to actually delete the node associate with min
+            root->val = succ;
+            // min_node = NULL;    
+        }
+
+    }
+
+    root = balance_tree(root);
+
+
+    return root;
+
+
+}
+
+
+
+//delete node in avl tree. need to balance here also
 
 
 void print2DUtil(nodeaddress root, int space)
@@ -192,6 +268,7 @@ void print2D(nodeaddress root)
 {
     // Pass initial space count as 0
     print2DUtil(root, 0);
+    printf("____________________________________________________________________________________________________________________");
 }
 //utility functions to print tree in tree form https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/
 
@@ -238,8 +315,15 @@ int main(void)
     root = insert(root, 11);
 
     print2D(root); // prints tree horizontally
+    
 
-    inorder(root);
+    root = delete(root, 2);
+    print2D(root);
+    root = delete(root, 1);
+    print2D(root);
+    root = delete(root, 4);
+    print2D(root);
+   //inorder(root);
 
     //free(root);
     
