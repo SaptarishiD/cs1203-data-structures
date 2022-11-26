@@ -226,6 +226,8 @@ nodeaddress delete(nodeaddress root, int nodedata)
         }
 
     }
+    
+    root->height = max(find_height(root->left), find_height(root->right)) + 1;
 
     root = balance_tree(root);
 
@@ -315,15 +317,15 @@ int main(void)
     root = insert(root, 11);
 
     print2D(root); // prints tree horizontally
+    inorder(root);
+
     
 
     root = delete(root, 2);
-    print2D(root);
     root = delete(root, 1);
-    print2D(root);
     root = delete(root, 4);
     print2D(root);
-   //inorder(root);
+    inorder(root);
 
     //free(root);
     
