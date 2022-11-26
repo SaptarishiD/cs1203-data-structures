@@ -17,7 +17,7 @@ nodeaddress createNode(int data);
 nodeaddress insert(nodeaddress root, int data);
 nodeaddress delete(nodeaddress root, int nodedata);
 nodeaddress find_node_with_min_val(nodeaddress root);
-void freenode(nodeaddress root);
+//void freenode(nodeaddress root);
 void inorder(nodeaddress root); 
 
 
@@ -33,22 +33,26 @@ void print2D(nodeaddress root);
 
 int main(void)
 {
-    int n = 7;
+    int n = 10;
     int * array = makearray(n);
 
     nodeaddress bstroot = createBST(array, n);
-    //print2D(bstroot);
+    print2D(bstroot);
     inorder(bstroot);
-    bstroot = delete(bstroot, 17);
-    
     printf("\n");
+
+
+    bstroot = delete(bstroot, 17);
+    print2D(bstroot);
     inorder(bstroot);
+    
+    
     //print2D(bstroot);
 
 
     free(array);
     
-    freenode(bstroot);
+    //freenode(bstroot);
 
 
 
@@ -65,7 +69,7 @@ void inorder(nodeaddress root)
 	}
 	if( root )        
 	{
-		printf("%i\n", root->val);
+		printf(" %i ", root->val);
 	}
 	if( root->right ) 
 	{
@@ -88,9 +92,9 @@ int * makearray(int size)
             array[4] = 2;
             array[5] = 16;
             array[6] = 18;
-            // array[7] = 18;
-            // array[8] = 6;
-            // array[9] = 0;
+            array[7] = 19;
+            array[8] = 6;
+            array[9] = 0;
         }       
      
 	}
@@ -203,9 +207,11 @@ nodeaddress delete(nodeaddress root, int nodedata)
 
         else if (root->left != NULL && root->right != NULL)
         {
-            nodeaddress min_node = find_node_with_min_val(root->right);       // the minimum valued node in the right subtree
-            root->val = min_node->val;
-            free(min_node);     // need to actually free the node associate with min
+            nodeaddress min_node = find_node_with_min_val(root->right);       // the minimum valued node in the right subtree (aka the successor element to nodedata)
+            int succ = min_node->val;
+            delete(root, min_node->val);                  // need to actually delete the node associate with min
+            root->val = succ;
+            // min_node = NULL;    
         }
 
     }
@@ -231,37 +237,37 @@ nodeaddress find_node_with_min_val(nodeaddress root)
 }
 
 
-void freenode(nodeaddress root)
-{
-    if (root == NULL)
-    {
-        return;
-    }
+// void freenode(nodeaddress root)
+// {
+//     if (root == NULL)
+//     {
+//         return;
+//     }
 
-    else if(root->left == NULL && root->right != NULL)
-    {
-        freenode(root->right);
-        free(root);
-        root = NULL;
-    }
+//     else if(root->left == NULL && root->right != NULL)
+//     {
+//         freenode(root->right);
+//         free(root);
+//         root = NULL;
+//     }
 
-    else if(root->left != NULL && root->right == NULL)
-    {
-        freenode(root->left);
-        free(root);
-        root = NULL;
+//     else if(root->left != NULL && root->right == NULL)
+//     {
+//         freenode(root->left);
+//         free(root);
+//         root = NULL;
       
-    }
+//     }
 
-    else if (root->left != NULL && root->right != NULL)
-    {
-      freenode(root->right);
-      freenode(root->left);
-      free(root);
-      root = NULL;
-    }
+//     else if (root->left != NULL && root->right != NULL)
+//     {
+//       freenode(root->right);
+//       freenode(root->left);
+//       free(root);
+//       root = NULL;
+//     }
 
-}
+// }
 
 
 
