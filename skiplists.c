@@ -1,17 +1,52 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 
 struct node {
 	int val;
 	struct node * next;  
-	struct node * next2;
-    struct node * next4; 
+	struct node * nextk1;
+    struct node * nextk2; 
 };
 
 typedef struct node * nodeaddress;
 
+int * generateArray(int size);
+void quicksortarray(int * array, int start, int stop);
+int partition(int * array, int start, int stop);
+void swap(int * a, int * b);
 
+int rand_val_of_k(void);
+nodeaddress linkedListFromArray(int * a, int n);
+nodeaddress create_skip_list(int * arr, int n);
+void printskiplist(nodeaddress head);
+
+
+
+int main(void)
+{
+    srand(time(0));
+    int n;
+    printf("Enter length of skip list: ");
+    scanf("%d", &n);
+    int * array = generateArray(n);
+
+    quicksortarray(array, 0, n-1);
+
+    nodeaddress skiplist = create_skip_list(array, n);
+
+    printskiplist(skiplist); // prints address of node, value, address of next, nextk1 and nextk2
+
+}
+
+
+
+int rand_val_of_k(void) // generates random value of 1 < k <= 5
+{    
+    int result = (rand()%5) + 2;
+    return result;
+}
 
 int * makearray(int size) 
 {
@@ -36,7 +71,67 @@ int * makearray(int size)
 	return array;
 }
 
-nodeaddress linkedListFromArray(int * a, int n)  // this is linear insertion i think
+int * generateArray(int size)
+{
+    int * array = malloc(size * sizeof(int));
+    
+    for (int i = 0; i < size; i++)
+    {
+        array[i] = rand()%1000;
+    }
+
+    return array;
+}
+
+
+void quicksortarray(int * array, int start, int stop)
+{
+    if (start < stop)
+    {
+        int partindex = partition(array, start, stop);
+        quicksortarray(array, start, partindex-1);
+        quicksortarray(array, partindex+1, stop);
+    }
+
+}
+
+int partition(int * array, int start, int stop)
+{
+
+    int pivot = array[start];
+    int i = start+1;
+    int j = stop;
+
+    while(i <= j)
+    {
+        if (array[i] > pivot)
+        {
+            swap(&array[i], &array[j]);
+            j = j - 1;
+        }
+
+        else
+        {
+            i = i + 1;
+        }
+    }
+
+    swap(&array[start], &array[j]); 
+
+    return j;
+
+}
+
+void swap(int * a, int * b)
+{
+    int temp;
+    temp = *a;
+    *a = *b;
+    *b = temp;
+}
+
+
+nodeaddress linkedListFromArray(int * a, int n) 
 {
 	int i;
 	nodeaddress head = NULL;
@@ -70,7 +165,13 @@ nodeaddress create_skip_list(int * arr, int n)
     nodeaddress temp = head;
     nodeaddress temp2nd = temp;
 
-    for (int count = 0; count < 2; count++)
+    int firstjumpval = rand_val_of_k();
+    int secondjumpval = 2*firstjumpval;
+
+    printf(" k1 : %i\n ", firstjumpval);
+    printf(" k2 : %i\n ", secondjumpval);
+
+    for (int count = 0; count < firstjumpval; count++)
     {
         if (temp2nd == NULL)
         {
@@ -84,17 +185,17 @@ nodeaddress create_skip_list(int * arr, int n)
 
     if (temp2nd == NULL)
     {
-        head->next2 = NULL;
+        head->nextk1 = NULL;
     }
     else
     {
-        head->next2 = temp2nd;
+        head->nextk1 = temp2nd;
     }
 
     // for assigning the 4 skip part
     temp2nd = temp;
 
-    for (int count = 0; count < 4; count++)
+    for (int count = 0; count < secondjumpval; count++)
     {
         if (temp2nd == NULL)
         {
@@ -108,11 +209,11 @@ nodeaddress create_skip_list(int * arr, int n)
 
     if (temp2nd == NULL)
     {
-        head->next4 = NULL;
+        head->nextk2 = NULL;
     }
     else
     {
-        head->next4 = temp2nd;
+        head->nextk2 = temp2nd;
     }
 
 
@@ -123,9 +224,9 @@ nodeaddress create_skip_list(int * arr, int n)
         temp = temp->next;
         temp2nd = temp;
 
-        if ( i % 2 == 0)
+        if ( i % firstjumpval == 0)
         {
-            for (int count = 0; count < 2; count++)
+            for (int count = 0; count < firstjumpval; count++)
             {
                 if (temp2nd == NULL)
                 {
@@ -138,19 +239,19 @@ nodeaddress create_skip_list(int * arr, int n)
             }
             if (temp2nd == NULL)
             {
-                temp->next2 = NULL;
+                temp->nextk1 = NULL;
             }
             else
             {
-                temp->next2 = temp2nd;
+                temp->nextk1 = temp2nd;
             }
         }
 
         temp2nd = temp;
 
-        if (i % 4 == 0)
+        if (i % secondjumpval == 0)
         {
-            for (int count = 0; count < 4; count++)
+            for (int count = 0; count < secondjumpval; count++)
             {
                 if (temp2nd == NULL)
                 {
@@ -163,11 +264,11 @@ nodeaddress create_skip_list(int * arr, int n)
             }
             if (temp2nd == NULL)
             {
-                temp->next4 = NULL;
+                temp->nextk2 = NULL;
             }
             else
             {
-                temp->next4 = temp2nd;
+                temp->nextk2 = temp2nd;
             }
 
         }
@@ -178,11 +279,11 @@ nodeaddress create_skip_list(int * arr, int n)
 
 }
 
-void printLinkedList(nodeaddress head) 
+void printskiplist(nodeaddress head) 
 {
 	nodeaddress temp;
     int count = 0;
-	printf("Linked List = ");
+	printf("Skip List = ");
 	for(temp = head; temp != NULL; temp = temp->next) 
     {
 		if (temp == head)
@@ -192,8 +293,8 @@ void printLinkedList(nodeaddress head)
             printf("Addr %d ", temp);
             printf("Val %d ", temp->val);
             printf("Next %d ", temp->next);
-            printf("next2 %d ", temp->next2);
-            printf("next4 %d ", temp->next4);
+            printf("nextk1 %d ", temp->nextk1);
+            printf("nextk2 %d ", temp->nextk2);
             printf("\n");
             count++;
 
@@ -205,8 +306,8 @@ void printLinkedList(nodeaddress head)
            printf("Addr %d ", temp);
            printf("Val %d ", temp->val);
            printf("Next %d ", temp->next);
-           printf("next2 %d ", temp->next2);
-           printf("next4 %d ", temp->next4);
+           printf("nextk1 %d ", temp->nextk1);
+           printf("nextk2 %d ", temp->nextk2);
            printf("\n");
            count++;
         }
@@ -215,16 +316,3 @@ void printLinkedList(nodeaddress head)
 }
 
 
-int main(void)
-{
-    int n = 10;
-    int * array = makearray(n);
-
-    nodeaddress skiplist = create_skip_list(array, n);
-
-    printLinkedList(skiplist); // prints address of node, value, address of next, next2 and next4
-
-
-
-
-}
