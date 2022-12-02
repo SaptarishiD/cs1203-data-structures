@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 
-#define stacksize 10
+#define max_stack_size 10
+int count = 0;
 
 struct node
 {
@@ -18,35 +19,45 @@ nodeaddress top = NULL;
 
 nodeaddress insert(nodeaddress head, int data)
 {
-    nodeaddress p = NULL;
-    nodeaddress temp = malloc(sizeof(struct node));
-    temp->val = data;
-    temp->next = NULL;
+    if (count == max_stack_size)
+    {
+        printf("Stack overflow while trying to insert %i\n", data);
+        return head;
 
-    if (head == NULL)
-    {
-        head = temp;
-        top = head;
     }
-    
-    else 
-    {
-        p = head;
-        while(p->next != NULL)
+
+    else
+    {   nodeaddress p = NULL;
+        nodeaddress temp = malloc(sizeof(struct node));
+        temp->val = data;
+        temp->next = NULL;
+
+        if (top == NULL)
         {
-            p = p->next;
+            top = temp;
+            head = top;
+        }
+        
+        else 
+        {
+            p = head;
+            while(p->next != NULL)
+            {
+                p = p->next;
+            }
+
+            p->next = temp;
+            top = temp;
         }
 
-        p->next = temp;
-        top = temp;
+        count++;
+        return head;
+        
     }
-
-    return head;
 }
 
 void extract(nodeaddress list)
 {
-
     if (list && top)
     {
         printf(" %i \n", top->val);
@@ -67,17 +78,19 @@ void extract(nodeaddress list)
         else if (temp->next == NULL)
         {
             top = NULL;
-
+            list = NULL;
         }
-        
-        
 
+        count--;
+        
+    
     }
 
     else if (top == NULL)
     {
-        printf("Stack empty\n");
+        printf("Stack underflow since stack is empty\n");
     }
+
 
 }
 
@@ -86,6 +99,7 @@ void extract(nodeaddress list)
 void printLinkedList(nodeaddress list)
 {
     nodeaddress t = NULL;
+    printf("Linked list: ");
     for (t = list; t != NULL; t = t->next)
     {
         printf(" %d ", t->val);
@@ -107,20 +121,48 @@ int main(void)
     list = insert(list, 15);
     list = insert(list, 20);
 
+    list = insert(list, 43);
+    list = insert(list, 23);
+    list = insert(list, 978);
+    list = insert(list, 49);
+    list = insert(list, 90);
+
+    list = insert(list, 40);
+    list = insert(list, 38);
+
     printLinkedList(list);
 
     extract(list);
     extract(list);
     extract(list);
     extract(list);
+    extract(list);
+
+    extract(list);
+    extract(list);
+    extract(list);
+    extract(list);
+    extract(list);
+
+    extract(list);
+
+    list = insert(list, 47);
+    list = insert(list, 43);
 
     extract(list);
     extract(list);
 
+    extract(list);
 
-    //printLinkedList(list);
+    list = insert(list, 87);
+
+    extract(list);
 
 
+
+
+    
+    
 
 
 
