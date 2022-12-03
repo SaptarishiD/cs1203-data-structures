@@ -3,7 +3,7 @@
 
 // STACK OF POSITIVE NUMBERS
 struct stackType {
-	int *data;
+	unsigned int *data;
 	int size;
 	int top;
 };
@@ -24,10 +24,10 @@ void freeStack(StackAddress s)
 	free(s);
 }
 
-int insertStack(StackAddress s, int val) 
+int insertStack(StackAddress s, unsigned int val) 
 {
 	if( s->top == s->size - 1 ) {return -1;} // stack is full
-	if( val < 0 ) {return -2;}
+	// if( val < 0 ) {return -2;} 
 	s->data[ ++s->top ] = val; // BEFORE inserting element into s->data array we need to increase the top index by 1 and then insert there
 	return val;
 }
@@ -43,7 +43,7 @@ int extractStack(StackAddress s)
 
 struct queueType 
 {
-	int *data;
+	unsigned int *data;
 	int size;
 	int start;
 	int n; // number of elements in the queue
@@ -65,7 +65,7 @@ void freeQueue(QueueAddress q)
 	free(q);
 }
 
-int insertQueue(QueueAddress q, int val) 
+int insertQueue(QueueAddress q, unsigned int val) 
 {
 	if(q->n == q->size) {return -1;}
 	if(val < 0) {return -2;}
@@ -90,13 +90,13 @@ int main()
 
 	insertStack(s, 10);
 	insertStack(s, 20);
-	insertStack(s, 30);
+	insertStack(s, -3);
 	insertStack(s, 555);
 
-	printf("%d ", extractStack(s));
-	printf("%d ", extractStack(s));
-	printf("%d ", extractStack(s));
-	printf("%d ", extractStack(s));
+	printf("%u ", extractStack(s));
+	printf("%u ", extractStack(s));
+	printf("%u ", extractStack(s));
+	printf("%u ", extractStack(s));
 
 	freeStack(s);
 
@@ -106,10 +106,10 @@ int main()
 	insertQueue(q, 10);
 	insertQueue(q, 20);
 	insertQueue(q, 30);
-	insertQueue(q, 555);
+	insertQueue(q, -100);
     insertQueue(q, 23);
 
-	printf("%d ", extractQueue(q));
+	printf("%u ", extractQueue(q));
 
     insertQueue(q, 555);
     printf("%d ", extractQueue(q));
@@ -117,9 +117,9 @@ int main()
 
 
 
-    printf("%d ", extractQueue(q));
-    printf("%d ", extractQueue(q));
-    printf("%d ", extractQueue(q));
+    printf("%u ", extractQueue(q));
+    printf("%u", extractQueue(q));
+    printf("%u", extractQueue(q));
 
 
 
