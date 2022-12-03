@@ -180,6 +180,18 @@ void printLinkedlist(nodeaddress list)
 
 }
 
+void freeLinkedList(nodeaddress head) 
+{
+	nodeaddress prev;
+	while(head) 
+    {
+		prev = head;
+		head = head->next;
+		free(prev);
+	}
+}
+
+
 
 
 int main(void)
@@ -230,6 +242,8 @@ int main(void)
 
     // extract_stack(stack);
 
+    // freeLinkedList(stack);
+
 
     nodeaddress q = NULL;
 
@@ -258,5 +272,7 @@ int main(void)
 
     q = extract_queue(q);
     q = extract_queue(q);
+
+    freeLinkedList(q);
 
 }
