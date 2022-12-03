@@ -1,5 +1,5 @@
-#include<stdio.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 // STACK OF POSITIVE NUMBERS
 struct stackType {
@@ -9,7 +9,8 @@ struct stackType {
 };
 typedef struct stackType * StackAddress;
 
-StackAddress initStack() {
+StackAddress initStack() 
+{
 	StackAddress s = malloc( sizeof(struct stackType) );
 	s->top  = -1;
 	s->size = 100;
@@ -17,27 +18,31 @@ StackAddress initStack() {
 	return s;
 }
 
-void freeStack(StackAddress s){
+void freeStack(StackAddress s)
+{
 	free(s->data);
 	free(s);
 }
 
-int insertStack(StackAddress s, int val) {
-	if( s->top == s->size-1 ) {return -1;} // stack is full
+int insertStack(StackAddress s, int val) 
+{
+	if( s->top == s->size - 1 ) {return -1;} // stack is full
 	if( val < 0 ) {return -2;}
-	s->data[ ++s->top ] = val;
+	s->data[ ++s->top ] = val; // BEFORE inserting element into s->data array we need to increase the top index by 1 and then insert there
 	return val;
 }
 
-int extractStack(StackAddress s) {
+int extractStack(StackAddress s) 
+{
 	if( s->top < 0 ) return -1; // stack is empty
-	return s->data[ s->top-- ];
+	return s->data[ s->top-- ]; // AFTER extracting top indexed element we need to decrease the value of top by 1
 }
 
 
 //=============================================================
 
-struct queueType {
+struct queueType 
+{
 	int *data;
 	int size;
 	int start;
@@ -45,33 +50,40 @@ struct queueType {
 };
 typedef struct queueType * QueueAddress;
 
-QueueAddress initQueue() {
+QueueAddress initQueue() 
+{
 	QueueAddress q = malloc( sizeof(struct queueType) );
 	q->n     = 0;
 	q->start = 0;
-	q->size  = 100;
+	q->size  = 5;
 	q->data  = malloc( q->size * sizeof(int) );
 	return q;
 }
 
-void freeQueue(QueueAddress q) {
+void freeQueue(QueueAddress q) 
+{
 	free(q);
 }
 
-int insertQueue(QueueAddress q, int val) {
+int insertQueue(QueueAddress q, int val) 
+{
 	if(q->n == q->size) {return -1;}
 	if(val < 0) {return -2;}
-	q->data[ (q->start + q->n++) ] =  val;
+
+	q->data[ (q->start + q->n) % (q->size) ] =  val;
+    q->n++;
 	return val;
 }
 
-int extractQueue(QueueAddress q) {
+int extractQueue(QueueAddress q) 
+{
 	if(q->n == 0) return -1;
 	q->n--;
 	return q->data[ q->start++ ];
 }
 
-int main() {
+int main() 
+{
 
 	printf("Stack: ");
 	StackAddress s = initStack();
@@ -95,12 +107,21 @@ int main() {
 	insertQueue(q, 20);
 	insertQueue(q, 30);
 	insertQueue(q, 555);
+    insertQueue(q, 23);
 
 	printf("%d ", extractQueue(q));
-	printf("%d ", extractQueue(q));
-	printf("%d ", extractQueue(q));
-	printf("%d ", extractQueue(q));
-	printf("%d ", extractQueue(q));
+
+    insertQueue(q, 555);
+    printf("%d ", extractQueue(q));
+    insertQueue(q, 438);
+
+
+
+    printf("%d ", extractQueue(q));
+    printf("%d ", extractQueue(q));
+    printf("%d ", extractQueue(q));
+
+
 
 	freeQueue(q);
 
