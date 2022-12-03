@@ -3,7 +3,10 @@
 
 
 #define max_stack_size 10
+#define max_queue_size 5
+
 int count = 0;
+int count2 = 0;
 
 struct node
 {
@@ -17,7 +20,7 @@ nodeaddress top = NULL;
 
 
 
-nodeaddress insert(nodeaddress head, int data)
+nodeaddress insert_stack(nodeaddress head, int data)
 {
     if (count == max_stack_size)
     {
@@ -56,13 +59,13 @@ nodeaddress insert(nodeaddress head, int data)
     }
 }
 
-void extract(nodeaddress list)
+void extract_stack(nodeaddress head)
 {
-    if (list && top)
+    if (head && top)
     {
         printf(" %i \n", top->val);
 
-        nodeaddress temp = list;
+        nodeaddress temp = head;
 
         if (temp->next)
         {
@@ -78,7 +81,7 @@ void extract(nodeaddress list)
         else if (temp->next == NULL)
         {
             top = NULL;
-            list = NULL;
+            head = NULL;
         }
 
         count--;
@@ -96,7 +99,76 @@ void extract(nodeaddress list)
 
 
 
-void printLinkedList(nodeaddress list)
+nodeaddress insert_queue(nodeaddress head, int data)
+{
+    if (count2 == max_queue_size)
+    {
+        printf("Queue overflow while trying to insert %i\n", data);
+        return head;
+
+    }
+
+    else 
+    {
+        nodeaddress temp = malloc(sizeof(struct node));
+        temp->val = data;
+        temp->next = NULL;
+
+        if (head == NULL)
+        {
+            head = temp;
+            count2++;
+        }
+
+        else
+        {
+            nodeaddress p = head;
+            while(p->next != NULL)
+            {
+                p = p->next;
+            }
+            p->next = temp;
+            count2++;
+        }
+
+        return head;
+    }
+
+
+}
+
+
+nodeaddress extract_queue(nodeaddress head)
+{
+    if (head == NULL)
+    {
+        printf("Queue underflow since queue is empty\n");
+        return head;
+    }
+
+    else if (head->next)
+    {
+        nodeaddress temp = head;
+        head = head->next;
+        printf("%i\n", temp->val);
+        count2--;
+        return head;
+    }
+
+    else if (head->next == NULL)
+    {
+        printf("%i\n", head->val);
+        head = NULL;
+        count--;
+        return head;
+    }
+
+    return head;
+
+}
+
+
+void printLinkedlist(nodeaddress list)
 {
     nodeaddress t = NULL;
     printf("Linked list: ");
@@ -113,57 +185,78 @@ void printLinkedList(nodeaddress list)
 int main(void)
 {
 
-    nodeaddress list = NULL;
+    // nodeaddress stack = NULL;
 
-    list = insert(list, 5);
-    list = insert(list, 9);
-    list = insert(list, 10);
-    list = insert(list, 15);
-    list = insert(list, 20);
+    // stack = insert_stack(stack, 5);
+    // stack = insert_stack(stack, 9);
+    // stack = insert_stack(stack, 10);
+    // stack = insert_stack(stack, 15);
+    // stack = insert_stack(stack, 20);
 
-    list = insert(list, 43);
-    list = insert(list, 23);
-    list = insert(list, 978);
-    list = insert(list, 49);
-    list = insert(list, 90);
+    // stack = insert_stack(stack, 43);
+    // stack = insert_stack(stack, 23);
+    // stack = insert_stack(stack, 978);
+    // stack = insert_stack(stack, 49);
+    // stack = insert_stack(stack, 90);
 
-    list = insert(list, 40);
-    list = insert(list, 38);
+    // stack = insert_stack(stack, 40);
+    // stack = insert_stack(stack, 38);
 
-    printLinkedList(list);
+    // printLinkedstack(stack);
 
-    extract(list);
-    extract(list);
-    extract(list);
-    extract(list);
-    extract(list);
+    // extract_stack(stack);
+    // extract_stack(stack);
+    // extract_stack(stack);
+    // extract_stack(stack);
+    // extract_stack(stack);
 
-    extract(list);
-    extract(list);
-    extract(list);
-    extract(list);
-    extract(list);
+    // extract_stack(stack);
+    // extract_stack(stack);
+    // extract_stack(stack);
+    // extract_stack(stack);
+    // extract_stack(stack);
 
-    extract(list);
+    // extract_stack(stack);
 
-    list = insert(list, 47);
-    list = insert(list, 43);
+    // stack = insert_stack(stack, 47);
+    // stack = insert_stack(stack, 43);
 
-    extract(list);
-    extract(list);
+    // extract_stack(stack);
+    // extract_stack(stack);
 
-    extract(list);
+    // extract_stack(stack);
 
-    list = insert(list, 87);
+    // stack = insert_stack(stack, 87);
 
-    extract(list);
-
-
+    // extract_stack(stack);
 
 
-    
-    
+    nodeaddress q = NULL;
 
+    q = insert_queue(q, 5);
+    q = insert_queue(q, 7);
+    q = insert_queue(q, 67);
+    q = insert_queue(q, 534);
+    q = insert_queue(q, 23);
 
+    q = insert_queue(q, 68);
+
+    printLinkedlist(q);
+    printf("Count2: %i\n", count2);
+
+    q = extract_queue(q);
+    q = extract_queue(q);
+    q = extract_queue(q);
+    q = extract_queue(q);
+    q = extract_queue(q);
+    q = extract_queue(q);
+
+    q = insert_queue(q, 30);
+    q = insert_queue(q, 40);
+
+    printLinkedlist(q);
+
+    q = extract_queue(q);
+    q = extract_queue(q);
 
 }
