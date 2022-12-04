@@ -1,126 +1,173 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-// STACK OF POSITIVE NUMBERS
-struct stackType {
-	int *data;
-	int size;
-	int top;
+struct stackaddress{
+    int * data;
+    int top;
+    int size;
 };
-typedef struct stackType * StackAddress;
 
-StackAddress initStack() 
+typedef struct stackaddress * stackaddr;
+
+stackaddr initStack(void)
 {
-	StackAddress s = malloc( sizeof(struct stackType) );
-	s->top  = -1;
-	s->size = 100;
-	s->data = malloc( s->size * sizeof(int) );
-	return s;
+    stackaddr s = malloc(sizeof(stackaddr));
+    s->size = 5;
+    s->data = malloc(s->size*sizeof(int));
+    s->top = -1;
+    return s;
 }
 
-void freeStack(StackAddress s)
+void freeStack(stackaddr s)
 {
 	free(s->data);
 	free(s);
 }
 
-int insertStack(StackAddress s, int val) 
+int insertStack(stackaddr s, int val)
 {
-	if( s->top == s->size - 1 ) {return -1;} // stack is full
-	if( val < 0 ) {return -2;}
-	s->data[ ++s->top ] = val; // BEFORE inserting element into s->data array we need to increase the top index by 1 and then insert there
-	return val;
+    if (s->top == s->size - 1)
+    {
+        printf("Stack Overflow while trying to insert %i\n", val);
+        return -1;
+    }
+
+    if( val < 0 ) {return -3;} 
+
+    else 
+    {
+        s->top = s->top + 1;
+        s->data[s->top] = val;
+        return val;
+    }
 }
 
-int extractStack(StackAddress s) 
+int extractStack(stackaddr s)
 {
-	if( s->top < 0 ) return -1; // stack is empty
-	return s->data[ s->top-- ]; // AFTER extracting top indexed element we need to decrease the value of top by 1
+    if (s->top < 0)
+    {
+        printf("Stack Underflow\n");
+        return -2;
+    }
+
+    int returnelement = s->data[s->top];
+    s->top--;
+    return returnelement;
 }
 
 
-//=============================================================
 
-struct queueType 
-{
-	int *data;
-	int size;
-	int start;
-	int n; // number of elements in the queue
+//===================================================================================================
+
+
+struct queueaddress{
+    int * data;
+    int size;
+    int n;
+    int start;
 };
-typedef struct queueType * QueueAddress;
 
-QueueAddress initQueue() 
+typedef struct queueaddress * queueaddr;
+
+queueaddr initQueue()
 {
-	QueueAddress q = malloc( sizeof(struct queueType) );
-	q->n     = 0;
-	q->start = 0;
-	q->size  = 5;
-	q->data  = malloc( q->size * sizeof(int) );
-	return q;
+    queueaddr q = malloc(sizeof(queueaddr));
+    q->n = 0;
+    q->size = 5;
+    q->data = malloc(q->size * sizeof(int));
+    q->start = 0;
+    return q;
+
 }
-
-void freeQueue(QueueAddress q) 
+void freeQueue(queueaddr q) 
 {
+    free(q->data);
 	free(q);
 }
 
-int insertQueue(QueueAddress q, int val) 
-{
-	if(q->n == q->size) {return -1;}
-	if(val < 0) {return -2;}
 
-	q->data[ (q->start + q->n) % (q->size) ] =  val;
+int insertQueue(queueaddr q, int val)
+{
+    if (q->n == q->size)
+    {
+        printf("Queue Overflow\n");
+        return -1;
+    }
+
+    if (val < 0){return -3;}
+
+    q->data[(q->start + q->n) % q->size] = val;
     q->n++;
-	return val;
+    return val;
 }
 
-int extractQueue(QueueAddress q) 
+int extractQueue(queueaddr q)
 {
-	if(q->n == 0) return -1;
-	q->n--;
-	return q->data[ q->start++ ];
+    if (q->n < 1)
+    {
+        printf("Queue Underflow\n");
+        return -2;
+        
+    }
+    
+    int returnelement = q->data[q->start];
+    q->start = (q->start + 1) % q->size;
+    q->n--;
+    return returnelement;
+
 }
 
-int main() 
+
+
+
+
+
+int main(void) 
 {
 
 	printf("Stack: ");
-	StackAddress s = initStack();
+	stackaddr s = initStack();
 
 	insertStack(s, 10);
 	insertStack(s, 20);
-	insertStack(s, 30);
+	insertStack(s, 15);
 	insertStack(s, 555);
+    insertStack(s, 34);
+    insertStack(s, 45);
 
 	printf("%d ", extractStack(s));
 	printf("%d ", extractStack(s));
 	printf("%d ", extractStack(s));
 	printf("%d ", extractStack(s));
+    printf("%d ", extractStack(s));
 
 	freeStack(s);
 
 	printf("\n\nQueue: ");
-	QueueAddress q = initQueue();
+	queueaddr q = initQueue();
 
 	insertQueue(q, 10);
 	insertQueue(q, 20);
 	insertQueue(q, 30);
-	insertQueue(q, 555);
+	insertQueue(q, 75);
     insertQueue(q, 23);
 
 	printf("%d ", extractQueue(q));
-
-    insertQueue(q, 555);
-    printf("%d ", extractQueue(q));
-    insertQueue(q, 438);
-
-
-
     printf("%d ", extractQueue(q));
     printf("%d ", extractQueue(q));
     printf("%d ", extractQueue(q));
 
+    printf("\nq->start: %i\n", q->start);
+
+    printf("%d ", extractQueue(q));
+
+    printf("\nq->start: %i\n", q->start);
+
+    insertQueue(q, 53);
+
+    printf("%d ", extractQueue(q));
+
+    printf("\nq->start: %i\n", q->start);
 
 
 	freeQueue(q);
