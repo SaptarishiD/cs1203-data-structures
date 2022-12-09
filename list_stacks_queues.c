@@ -44,7 +44,7 @@ nodeaddress insert_stack(nodeaddress head, int data)
         else 
         {
             p = head;
-            while(p->next != NULL)
+            while(p->next != NULL) // this is linear time insertion into the stack
             {
                 p = p->next;
             }
@@ -69,7 +69,7 @@ void extract_stack(nodeaddress head)
 
         if (temp->next)
         {
-            while(temp->next->next != NULL)
+            while(temp->next->next != NULL) // linear time extracting from stack
             {
                 temp = temp->next;
             }
@@ -99,74 +99,127 @@ void extract_stack(nodeaddress head)
 
 
 
-nodeaddress insert_queue(nodeaddress head, int data)
+// nodeaddress start = NULL;
+
+// nodeaddress enqueue(nodeaddress head, int data)
+// {
+//     if (count2 == max_queue_size)
+//     {
+//         printf("Queue overflow while trying to insert %i\n", data);
+//         return head;
+
+//     }
+
+//     else 
+//     {
+//         nodeaddress temp = malloc(sizeof(struct node));
+//         temp->val = data;
+//         temp->next = NULL;
+
+//         if (head == NULL)
+//         {
+//             head = temp;
+//             start = head;
+//             count2++;
+//         }
+
+//         else
+//         {
+//             nodeaddress p = head;
+//             while(p->next != NULL)
+//             {
+//                 p = p->next;
+//             }
+//             p->next = temp;
+//             count2++;
+//         }
+
+//         return head;
+//     }
+
+
+// }
+
+
+// nodeaddress dequeue(nodeaddress head)
+// {
+//     if (start == NULL)
+//     {
+//         printf("Queue underflow since queue is empty\n");
+//         return head;
+//     }
+
+//     else if (head->next)
+//     {
+//         nodeaddress temp = start;
+//         start = start->next;
+//         printf("%i\n", temp->val);
+//         count2--;
+//         return head;
+//     }
+
+//     else if (start->next == NULL)
+//     {
+//         printf("%i\n", start->val);
+//         start = NULL;
+//         count2--;
+//         return head;
+//     }
+
+//     return head;
+
+// }
+
+nodeaddress start = NULL;
+nodeaddress end = NULL;
+
+void enqueue(nodeaddress head, int data)
 {
+    nodeaddress newnode = malloc(sizeof(struct node));
+    newnode->val = data;
+    newnode->next = NULL;
+
     if (count2 == max_queue_size)
     {
         printf("Queue overflow while trying to insert %i\n", data);
-        return head;
+        return;
+    }
 
+    if (start == NULL && end == NULL)
+    {
+        start = newnode;
+        end = newnode;
+        head = start;
     }
 
     else 
     {
-        nodeaddress temp = malloc(sizeof(struct node));
-        temp->val = data;
-        temp->next = NULL;
-
-        if (head == NULL)
-        {
-            head = temp;
-            count2++;
-        }
-
-        else
-        {
-            nodeaddress p = head;
-            while(p->next != NULL)
-            {
-                p = p->next;
-            }
-            p->next = temp;
-            count2++;
-        }
-
-        return head;
+        end->next = newnode;
+        end = end->next;
     }
 
+    printf("End->val: %i\n", end->val); // element which is enqueued
 
+    count2++;
+    return;
+    
 }
 
-
-nodeaddress extract_queue(nodeaddress head)
+void dequeue(nodeaddress head)
 {
-    if (head == NULL)
+    if (start == NULL)
     {
         printf("Queue underflow since queue is empty\n");
-        return head;
+        return;
     }
 
-    else if (head->next)
-    {
-        nodeaddress temp = head;
-        head = head->next;
-        printf("%i\n", temp->val);
-        count2--;
-        return head;
-    }
-
-    else if (head->next == NULL)
-    {
-        printf("%i\n", head->val);
-        head = NULL;
-        count--;
-        return head;
-    }
-
-    return head;
+    printf("start->val: %i\n", start->val); // element which is dequeued
+    nodeaddress temp = start;
+    start = start->next;
+    head = start;
+    free(temp);
 
 }
-
 
 void printLinkedlist(nodeaddress list)
 {
@@ -214,7 +267,7 @@ int main(void)
     // stack = insert_stack(stack, 40);
     // stack = insert_stack(stack, 38);
 
-    // printLinkedstack(stack);
+    // printLinkedlist(stack);
 
     // extract_stack(stack);
     // extract_stack(stack);
@@ -245,33 +298,40 @@ int main(void)
     // freeLinkedList(stack);
 
 
+
+
     nodeaddress q = NULL;
 
-    q = insert_queue(q, 5);
-    q = insert_queue(q, 7);
-    q = insert_queue(q, 67);
-    q = insert_queue(q, 534);
-    q = insert_queue(q, 23);
+    enqueue(q, 18);
+    enqueue(q, 7);
+    enqueue(q, 67);
+    enqueue(q, 534);
+    enqueue(q, 23);
 
-    q = insert_queue(q, 68);
+    enqueue(q, 68);
 
     printLinkedlist(q);
     printf("Count2: %i\n", count2);
 
-    q = extract_queue(q);
-    q = extract_queue(q);
-    q = extract_queue(q);
-    q = extract_queue(q);
-    q = extract_queue(q);
-    q = extract_queue(q);
+    dequeue(q);
 
-    q = insert_queue(q, 30);
-    q = insert_queue(q, 40);
+    //enqueue(q, 38);
 
-    printLinkedlist(q);
+    dequeue(q);
+    dequeue(q);
+    dequeue(q);
+    dequeue(q);
 
-    q = extract_queue(q);
-    q = extract_queue(q);
+    dequeue(q);
+
+
+    // enqueue(q, 30);
+    // enqueue(q, 40);
+
+    // printLinkedlist(q);
+
+    // dequeue(q);
+    // dequeue(q);
 
     freeLinkedList(q);
 
