@@ -303,7 +303,6 @@ int main(int argc, char *argv[])
     unsigned int n = size(); 
     unload(); // Unload dictionary
     
-
     printf("\nWords misspelled:    %d\n", misspellings);
     printf("Words in dictionary:   %d\n", n);
     printf("Words in the text:     %d\n", words);
